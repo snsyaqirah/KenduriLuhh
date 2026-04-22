@@ -52,7 +52,7 @@ function parseFirstRm(text: string): number | null {
   return parseRm(text) ?? null;
 }
 
-export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewang'): ParsedOutput {
+export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewang', language: 'ms' | 'en' = 'ms'): ParsedOutput {
   const bendahari = messages.find((m) => m.agent === 'Bendahari');
   const abangLorry = messages.find((m) => m.agent === 'Abang_Lorry');
   const makTokMsgs = messages.filter((m) => m.agent === 'Mak_Tok');
@@ -92,7 +92,8 @@ export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewa
       if (!l) return null;
       return parseFirstRm(l);
     })();
-    const isApproved  = /LULUS|approved|within budget/i.test(b);
+    const isRejected  = /\bGAGAL\b|\bFAILED\b|OVER BAJET|OVER BUDGET/i.test(b);
+    const isApproved  = !isRejected && /\bLULUS\b|\bAPPROVED\b|within budget/i.test(b);
 
     budget = { rawMaterial, overhead, labour, transport, subtotal, marginPct, marginRm, quotation, perHead, isApproved };
   }
@@ -103,12 +104,9 @@ export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewa
     const plain = stripMd(abangLorry.content);
     const blocks = plain.split(/\n(?=T-\d+|Hari Majlis|Event Day|T-0)/i);
 
-    const labelMap: Record<string, string> = {
-      'T-3': '3 Days Before',
-      'T-2': '2 Days Before',
-      'T-1': '1 Day Before',
-      'T-0': 'Event Day',
-    };
+    const labelMap: Record<string, string> = language === 'en'
+      ? { 'T-3': '3 Days Before', 'T-2': '2 Days Before', 'T-1': '1 Day Before', 'T-0': 'Event Day' }
+      : { 'T-3': '3 Hari Sebelum', 'T-2': '2 Hari Sebelum', 'T-1': '1 Hari Sebelum', 'T-0': 'Hari Majlis' };
 
     for (const block of blocks) {
       const keyMatch = block.match(/^(T-\d+|Hari Majlis|Event Day)/i);

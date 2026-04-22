@@ -6,9 +6,9 @@ import { OutputPanel } from './components/outputs/OutputPanel';
 import { useAgentChat } from './hooks/useAgentChat';
 
 export default function App() {
-  const { messages, status, typingAgent, error, doneAgents, mode, startChat, stopChat } = useAgentChat();
+  const { messages, status, typingAgent, error, doneAgents, mode, retryAttempt, startChat, stopChat } = useAgentChat();
 
-  const isActive = status === 'loading' || status === 'running';
+  const isActive = status === 'loading' || status === 'running' || status === 'reconnecting';
   const showFeed = messages.length > 0 || isActive;
 
   return (
@@ -28,7 +28,15 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
-            {isActive && (
+            {status === 'reconnecting' && (
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                <span className="text-xs text-amber-600 font-semibold hidden sm:inline">
+                  Menyambung semula… ({retryAttempt}/{3})
+                </span>
+              </div>
+            )}
+            {(status === 'loading' || status === 'running') && (
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                 <span className="text-xs text-emerald-600 font-semibold hidden sm:inline">
@@ -90,6 +98,21 @@ export default function App() {
           )}
         </AnimatePresence>
 
+        {/* Reconnecting banner */}
+        <AnimatePresence>
+          {status === 'reconnecting' && (
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700 shadow-sm flex items-center gap-3"
+            >
+              <span className="w-4 h-4 border-2 border-amber-500 border-t-transparent rounded-full animate-spin flex-shrink-0" />
+              Sambungan terputus. Menyambung semula… (percubaan {retryAttempt} daripada 3)
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Split-screen layout when feed is visible, else centred form */}
         <AnimatePresence mode="wait">
           {!showFeed ? (
@@ -101,14 +124,7 @@ export default function App() {
               transition={{ duration: 0.3 }}
               className="max-w-2xl mx-auto w-full"
             >
-              <div className="mb-6 text-center">
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-stone-900 leading-tight">
-                  Rancang Kenduri Anda
-                </h2>
-                <p className="text-stone-500 mt-2 text-sm">
-                  Isi butiran di bawah — lima ejen AI akan berunding untuk anda
-                </p>
-              </div>
+              <HeroText mode={mode} />
               <ChatInput onSubmit={startChat} disabled={isActive} />
             </motion.div>
           ) : (
@@ -170,6 +186,29 @@ export default function App() {
       <footer className="border-t border-stone-200 bg-white text-center py-4 text-xs text-stone-400">
         KenduriLuhh · iNextLabs Hackathon 2026 · Powered by Azure OpenAI & AutoGen
       </footer>
+    </div>
+  );
+}
+
+// ── Hero text ──────────────────────────────────────────────────────────────
+
+function HeroText({ mode }: { mode: 'katering' | 'rewang' }) {
+  const copy = mode === 'rewang'
+    ? {
+        title: 'Rancang Rewang Anda',
+        sub: 'Masukkan butiran di bawah — ejen AI akan sediakan senarai belanja & logistik rewang',
+      }
+    : {
+        title: 'Rancang Kenduri Anda',
+        sub: 'Isi butiran di bawah — lima ejen AI akan berunding untuk anda',
+      };
+
+  return (
+    <div className="mb-6 text-center">
+      <h2 className="font-display text-3xl sm:text-4xl font-bold text-stone-900 leading-tight">
+        {copy.title}
+      </h2>
+      <p className="text-stone-500 mt-2 text-sm">{copy.sub}</p>
     </div>
   );
 }

@@ -8,6 +8,11 @@ class Settings(BaseSettings):
     AZURE_OPENAI_DEPLOYMENT: str = "gpt-4o-kenduri"
     AZURE_OPENAI_API_VERSION: str = "2025-01-01-preview"
 
+    # Weather APIs (optional — falls back to seasonal estimate if empty)
+    TOMORROW_API_KEY: str = ""
+    WEATHERAPI_KEY: str = ""
+    REDAHLUHH_API_URL: str = "https://redahluhh.onrender.com"
+
     # Stored as comma-separated string; use cors_origins_list property
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
     SESSION_TTL_SECONDS: int = 3600

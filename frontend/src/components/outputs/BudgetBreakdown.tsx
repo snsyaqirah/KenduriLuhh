@@ -7,9 +7,10 @@ import type { BudgetData } from '../../utils/parseMessages';
 interface Props {
   budget: BudgetData;
   mode: 'katering' | 'rewang';
+  language?: 'ms' | 'en';
 }
 
-const SLICES = [
+const SLICES_EN = [
   { key: 'rawMaterial', label: 'Ingredients',  color: '#10b981' },
   { key: 'overhead',    label: 'Overhead',      color: '#f59e0b' },
   { key: 'labour',      label: 'Labour',        color: '#3b82f6' },
@@ -17,29 +18,42 @@ const SLICES = [
   { key: 'marginRm',    label: 'Profit Margin', color: '#6b7280' },
 ] as const;
 
+const SLICES_MS = [
+  { key: 'rawMaterial', label: 'Bahan Mentah',  color: '#10b981' },
+  { key: 'overhead',    label: 'Overhead',       color: '#f59e0b' },
+  { key: 'labour',      label: 'Tenaga Kerja',   color: '#3b82f6' },
+  { key: 'transport',   label: 'Pengangkutan',   color: '#8b5cf6' },
+  { key: 'marginRm',    label: 'Margin Untung',  color: '#6b7280' },
+] as const;
+
 function fmt(n: number | null) {
   if (n === null || n === 0) return null;
   return `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export function BudgetBreakdown({ budget, mode }: Props) {
+export function BudgetBreakdown({ budget, mode, language = 'ms' }: Props) {
+  const SLICES = language === 'en' ? SLICES_EN : SLICES_MS;
   const data = SLICES
     .map((s) => ({ name: s.label, value: budget[s.key] ?? 0, color: s.color }))
     .filter((d) => d.value > 0);
 
+  const l = language === 'en'
+    ? { ingredients: 'Ingredients', overhead: 'Overhead', labour: 'Labour', transport: 'Transport', totalCost: 'Total Cost', margin: 'Margin', quotation: 'Quotation Price', perHead: 'Per Head', approved: '✓ Approved', overBudget: '✗ Over Budget' }
+    : { ingredients: 'Bahan Mentah', overhead: 'Overhead', labour: 'Tenaga Kerja', transport: 'Pengangkutan', totalCost: 'Jumlah Kos', margin: 'Margin', quotation: 'Harga Sebut Harga', perHead: 'Setiap Kepala', approved: '✓ Lulus', overBudget: '✗ Over Bajet' };
+
   const summaryRows = [
-    { label: 'Ingredients',  value: fmt(budget.rawMaterial) },
-    { label: 'Overhead',     value: fmt(budget.overhead) },
-    { label: 'Labour',       value: fmt(budget.labour) },
-    { label: 'Transport',    value: fmt(budget.transport) },
-    { label: 'Total Cost',   value: fmt(budget.subtotal),  bold: true },
+    { label: l.ingredients, value: fmt(budget.rawMaterial) },
+    { label: l.overhead,    value: fmt(budget.overhead) },
+    { label: l.labour,      value: fmt(budget.labour) },
+    { label: l.transport,   value: fmt(budget.transport) },
+    { label: l.totalCost,   value: fmt(budget.subtotal), bold: true },
     ...(mode === 'katering' && budget.marginRm
-      ? [{ label: `Margin (${budget.marginPct ?? ''}%)`, value: fmt(budget.marginRm) }]
+      ? [{ label: `${l.margin} (${budget.marginPct ?? ''}%)`, value: fmt(budget.marginRm) }]
       : []),
     ...(mode === 'katering' && budget.quotation
-      ? [{ label: 'Quotation Price', value: fmt(budget.quotation), highlight: true }]
+      ? [{ label: l.quotation, value: fmt(budget.quotation), highlight: true }]
       : []),
-    ...(budget.perHead ? [{ label: 'Per Head', value: fmt(budget.perHead) }] : []),
+    ...(budget.perHead ? [{ label: l.perHead, value: fmt(budget.perHead) }] : []),
   ].filter((r) => r.value);
 
   return (
@@ -62,7 +76,7 @@ export function BudgetBreakdown({ budget, mode }: Props) {
               : 'bg-red-100 text-red-700',
           ].join(' ')}
         >
-          {budget.isApproved ? '✓ Approved' : '✗ Over Budget'}
+          {budget.isApproved ? l.approved : l.overBudget}
         </span>
       </div>
 

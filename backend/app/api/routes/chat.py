@@ -16,7 +16,9 @@ from app.models.request_models import CateringRequest
 from app.models.response_models import ChatStartResponse, ChatResultResponse, AgentMessage
 from app.services import session_service
 from app.services.knowledge_service import build_task_string
+from app.services.weather_service import get_event_weather
 from app.agents.group_chat import create_team, run_team_stream
+from app.config import settings
 
 router = APIRouter(prefix="/chat")
 
@@ -90,7 +92,16 @@ async def stream_chat(session_id: str):
     async def _live_stream():
         session_service.set_running(session_id)
         try:
-            team = create_team(mode=session["mode"], language=session.get("language", "ms"))
+            language = session.get("language", "ms")
+            weather_data = await get_event_weather(
+                location=request_data.get("event_location", ""),
+                event_date_str=request_data.get("event_date", ""),
+                language=language,
+                tomorrow_api_key=settings.TOMORROW_API_KEY,
+                weatherapi_key=settings.WEATHERAPI_KEY,
+                redahluhh_api_url=settings.REDAHLUHH_API_URL,
+            )
+            team = create_team(mode=session["mode"], language=language, weather_data=weather_data)
             task_text = build_task_string(request_data)
 
             async for agent_name, content in run_team_stream(team, task_text):

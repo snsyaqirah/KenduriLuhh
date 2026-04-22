@@ -1,21 +1,22 @@
 import { motion } from 'framer-motion';
-import type { Mode } from '../types';
+import type { Language, Mode } from '../types';
 
 interface Props {
   value: Mode;
   onChange: (m: Mode) => void;
   disabled?: boolean;
+  language?: Language;
 }
 
-const modes: { id: Mode; label: string; icon: string }[] = [
-  { id: 'katering', label: 'Katering Pro', icon: '🏢' },
-  { id: 'rewang',   label: 'Rewang DIY',   icon: '🏡' },
+const MODES: { id: Mode; label: { ms: string; en: string }; icon: string }[] = [
+  { id: 'katering', label: { ms: 'Katering Pro', en: 'Catering Pro' }, icon: '🏢' },
+  { id: 'rewang',   label: { ms: 'Rewang DIY',   en: 'Home Rewang'  }, icon: '🏡' },
 ];
 
-export function ModeToggle({ value, onChange, disabled }: Props) {
+export function ModeToggle({ value, onChange, disabled, language = 'ms' }: Props) {
   return (
     <div className="relative flex rounded-xl bg-stone-100 p-1 gap-0">
-      {modes.map((m) => (
+      {MODES.map((m) => (
         <button
           key={m.id}
           disabled={disabled}
@@ -36,7 +37,7 @@ export function ModeToggle({ value, onChange, disabled }: Props) {
             />
           )}
           <span className="relative z-10">{m.icon}</span>
-          <span className="relative z-10">{m.label}</span>
+          <span className="relative z-10">{m.label[language]}</span>
         </button>
       ))}
     </div>

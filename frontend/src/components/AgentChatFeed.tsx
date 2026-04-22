@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChefHat, Calculator, ShoppingBasket, Truck, Crown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { useChatStore } from '../store/chatStore';
 import type { AgentMessage } from '../types';
 
 const AGENT_META: Record<string, {
@@ -65,9 +66,19 @@ export function AgentChatFeed({ messages, typingAgent, status }: Props) {
   );
 }
 
+function getVerdictStyle(agent: string, content: string): { bg: string; badge: string | null } {
+  if (agent !== 'Bendahari') return { bg: 'bg-white', badge: null };
+  const isRejected = /GAGAL|OVER BAJET|OVER BUDGET|FAILED/i.test(content);
+  const isApproved = /\bLULUS\b|\bAPPROVED\b/i.test(content);
+  if (isRejected) return { bg: 'bg-red-50', badge: '❌ Budget Rejected' };
+  if (isApproved) return { bg: 'bg-emerald-50', badge: '✅ Budget Approved' };
+  return { bg: 'bg-white', badge: null };
+}
+
 function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
   const meta = AGENT_META[msg.agent] ?? DEFAULT_META;
   const { Icon } = meta;
+  const verdict = getVerdictStyle(msg.agent, msg.content);
 
   return (
     <motion.div
@@ -75,7 +86,7 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
       animate={{ opacity: 1, x: 0, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25, delay: index === 0 ? 0 : 0.05 }}
-      className={`bg-white rounded-xl border border-stone-100 border-l-4 ${meta.border} p-4 shadow-sm flex gap-3`}
+      className={`${verdict.bg} rounded-xl border border-stone-100 border-l-4 ${meta.border} p-4 shadow-sm flex gap-3`}
     >
       <div className={`flex-shrink-0 mt-0.5 w-7 h-7 rounded-full flex items-center justify-center text-sm ${meta.badge}`}>
         <Icon size={14} />
@@ -90,6 +101,16 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
               hour: '2-digit', minute: '2-digit', second: '2-digit',
             })}
           </span>
+          {verdict.badge && (
+            <span className={[
+              'ml-auto text-xs font-bold px-2 py-0.5 rounded-full',
+              verdict.badge.startsWith('❌')
+                ? 'bg-red-100 text-red-700'
+                : 'bg-emerald-100 text-emerald-700',
+            ].join(' ')}>
+              {verdict.badge}
+            </span>
+          )}
         </div>
         <div className="prose prose-sm prose-stone max-w-none text-stone-700">
           <ReactMarkdown
@@ -116,33 +137,55 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
   );
 }
 
+const AGENT_DOT_COLOR: Record<string, string> = {
+  Tok_Penghulu: 'bg-emerald-500',
+  Mak_Tok:      'bg-rose-400',
+  Tokey_Pasar:  'bg-blue-400',
+  Bendahari:    'bg-amber-400',
+  Abang_Lorry:  'bg-purple-400',
+};
+
 function TypingBubble({ agent }: { agent: string }) {
   const meta = AGENT_META[agent] ?? DEFAULT_META;
   const { Icon } = meta;
+  const dotColor = AGENT_DOT_COLOR[agent] ?? 'bg-stone-400';
+  const language = useChatStore((s) => s.language);
+  const thinkingText = language === 'en' ? 'is thinking…' : 'sedang berfikir…';
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0 }}
-      className={`bg-white rounded-xl border border-stone-100 border-l-4 ${meta.border} p-4 shadow-sm flex gap-3`}
+      exit={{ opacity: 0, x: -8 }}
+      transition={{ duration: 0.2 }}
+      className={`relative overflow-hidden bg-white rounded-xl border border-stone-100 border-l-4 ${meta.border} p-4 shadow-sm flex gap-3`}
     >
-      <div className={`flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm ${meta.badge}`}>
+      {/* Shimmer sweep */}
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+        animate={{ x: ['-100%', '100%'] }}
+        transition={{ repeat: Infinity, duration: 1.6, ease: 'linear' }}
+      />
+
+      <div className={`relative flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center text-sm ${meta.badge}`}>
         <Icon size={14} />
       </div>
-      <div className="flex flex-col gap-1.5">
+      <div className="relative flex flex-col gap-2">
         <span className={`text-xs font-bold uppercase tracking-wide ${meta.nameCls}`}>
           {agent.replace(/_/g, ' ')}
         </span>
-        <div className="flex gap-1 items-center h-4">
-          {[0, 1, 2].map((i) => (
-            <motion.span
-              key={i}
-              animate={{ y: [0, -4, 0] }}
-              transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }}
-              className="w-1.5 h-1.5 rounded-full bg-stone-400"
-            />
-          ))}
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1 items-center">
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                animate={{ y: [0, -5, 0], opacity: [0.5, 1, 0.5] }}
+                transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.18, ease: 'easeInOut' }}
+                className={`w-1.5 h-1.5 rounded-full ${dotColor}`}
+              />
+            ))}
+          </div>
+          <span className="text-xs text-stone-400 italic">{thinkingText}</span>
         </div>
       </div>
     </motion.div>

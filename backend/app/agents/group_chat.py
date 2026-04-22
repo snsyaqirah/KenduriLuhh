@@ -50,7 +50,7 @@ RULE 3 (Pricing): Mak_Tok just proposed a menu → select Tokey_Pasar.
 RULE 4 (Budget audit): Tokey_Pasar just gave a price report → select Bendahari.
   MANDATORY. Never skip. Bendahari is the ONLY agent who can approve or reject the budget.
 
-RULE 5 (Revision): Bendahari said GAGAL → select Mak_Tok for a cheaper menu.
+RULE 5 (Revision): Bendahari said GAGAL or FAILED → select Mak_Tok for a cheaper menu.
   After Mak_Tok revises → select Tokey_Pasar to re-price → then Bendahari again to re-audit.
   This revision cycle happens at most ONCE. Do not loop more than once.
 
@@ -70,13 +70,14 @@ Return ONLY the agent name, nothing else.
 """
 
 
-def create_team(mode: str = "katering", language: str = "ms") -> SelectorGroupChat:
+def create_team(mode: str = "katering", language: str = "ms", weather_data: str = "") -> SelectorGroupChat:
     """
     Creates and returns a configured 5-agent SelectorGroupChat team.
 
     Args:
         mode: "katering" (professional) or "rewang" (DIY kenduri)
         language: "ms" (Bahasa Malaysia) or "en" (English)
+        weather_data: Pre-fetched weather block for Abang_Lorry's system prompt
 
     Returns:
         A ready-to-run SelectorGroupChat instance.
@@ -87,7 +88,7 @@ def create_team(mode: str = "katering", language: str = "ms") -> SelectorGroupCh
     mak_tok = create_mak_tok(mode, language)
     tokey_pasar = create_tokey_pasar(mode, language)
     bendahari = create_bendahari(mode, language)
-    abang_lorry = create_abang_lorry(mode, language)
+    abang_lorry = create_abang_lorry(mode, language, weather_data)
 
     # TextMentionTermination: ends when any agent writes "SELESAI"
     # MaxMessageTermination: safety cap to avoid infinite loops and burning tokens

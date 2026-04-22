@@ -3,9 +3,13 @@ import { motion } from 'framer-motion';
 
 interface Props {
   isHalal: boolean;
+  language?: 'ms' | 'en';
 }
 
-export function HalalBadge({ isHalal }: Props) {
+export function HalalBadge({ isHalal, language = 'ms' }: Props) {
+  const verifiedText = language === 'en' ? 'Halal Verified' : 'Halal Disahkan';
+  const unknownText  = language === 'en' ? 'Halal Status Unknown' : 'Status Halal Tidak Diketahui';
+
   return (
     <motion.div
       initial={{ scale: 0.8, opacity: 0 }}
@@ -20,7 +24,7 @@ export function HalalBadge({ isHalal }: Props) {
     >
       <ShieldCheck size={16} className={isHalal ? 'text-emerald-600' : 'text-stone-400'} />
       <span className="text-xs font-bold tracking-wide uppercase">
-        {isHalal ? 'Halal Verified' : 'Halal Status Unknown'}
+        {isHalal ? verifiedText : unknownText}
       </span>
       {isHalal && (
         <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-semibold">

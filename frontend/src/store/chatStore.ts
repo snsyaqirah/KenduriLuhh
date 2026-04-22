@@ -1,41 +1,48 @@
 import { create } from 'zustand';
-import type { AgentMessage, Mode } from '../types';
+import type { AgentMessage, Language, Mode } from '../types';
 
-export type Status = 'idle' | 'loading' | 'running' | 'done' | 'error';
+export type Status = 'idle' | 'loading' | 'running' | 'reconnecting' | 'done' | 'error';
 
 interface ChatStore {
   mode: Mode;
+  language: Language;
   sessionId: string | null;
   messages: AgentMessage[];
   status: Status;
   error: string | null;
   typingAgent: string | null;
   doneAgents: string[];
+  retryAttempt: number;
 
   setMode: (mode: Mode) => void;
+  setLanguage: (lang: Language) => void;
   setSessionId: (id: string) => void;
   addMessage: (msg: AgentMessage) => void;
   setStatus: (s: Status) => void;
   setError: (e: string) => void;
   setTypingAgent: (agent: string | null) => void;
   markAgentDone: (agent: string) => void;
+  setReconnecting: (attempt: number) => void;
   reset: () => void;
 }
 
 const initialState = {
   mode: 'katering' as Mode,
+  language: 'ms' as Language,
   sessionId: null,
   messages: [],
   status: 'idle' as Status,
   error: null,
   typingAgent: null,
   doneAgents: [],
+  retryAttempt: 0,
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
   ...initialState,
 
   setMode: (mode) => set({ mode }),
+  setLanguage: (language) => set({ language }),
   setSessionId: (sessionId) => set({ sessionId }),
   addMessage: (msg) =>
     set((s) => ({
@@ -52,5 +59,6 @@ export const useChatStore = create<ChatStore>((set) => ({
     set((s) => ({
       doneAgents: s.doneAgents.includes(agent) ? s.doneAgents : [...s.doneAgents, agent],
     })),
+  setReconnecting: (attempt) => set({ status: 'reconnecting', retryAttempt: attempt }),
   reset: () => set(initialState),
 }));

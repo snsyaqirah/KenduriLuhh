@@ -4,6 +4,7 @@ import type { LogisticsEvent } from '../../utils/parseMessages';
 
 interface Props {
   events: LogisticsEvent[];
+  language?: 'ms' | 'en';
 }
 
 const KEY_STYLE: Record<string, { dot: string; text: string }> = {
@@ -14,8 +15,9 @@ const KEY_STYLE: Record<string, { dot: string; text: string }> = {
 };
 const DEFAULT_STYLE = { dot: 'bg-stone-400', text: 'text-stone-600' };
 
-export function LogisticsTimeline({ events }: Props) {
+export function LogisticsTimeline({ events, language = 'ms' }: Props) {
   if (events.length === 0) return null;
+  const heading = language === 'en' ? 'Logistics Timeline' : 'Jadual Logistik';
 
   return (
     <motion.div
@@ -27,7 +29,7 @@ export function LogisticsTimeline({ events }: Props) {
       <div className="px-4 py-3 border-b border-stone-100 bg-stone-50 flex items-center gap-2">
         <Truck size={14} className="text-purple-600" />
         <h4 className="text-xs font-semibold text-stone-600 uppercase tracking-widest">
-          Logistics Timeline
+          {heading}
         </h4>
       </div>
 

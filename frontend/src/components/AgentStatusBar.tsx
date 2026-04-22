@@ -2,11 +2,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChefHat, Calculator, ShoppingBasket, Truck, Crown } from 'lucide-react';
 
 const AGENTS = [
-  { key: 'Tok_Penghulu', label: 'Tok Penghulu', role: 'Pengerusi', Icon: Crown,        color: 'emerald' },
-  { key: 'Mak_Tok',      label: 'Mak Tok',      role: 'Chef',      Icon: ChefHat,      color: 'rose' },
-  { key: 'Tokey_Pasar',  label: 'Tokey Pasar',  role: 'Inventori', Icon: ShoppingBasket,color: 'blue' },
-  { key: 'Bendahari',    label: 'Bendahari',    role: 'Kewangan',  Icon: Calculator,   color: 'amber' },
-  { key: 'Abang_Lorry',  label: 'Abang Lorry',  role: 'Logistik',  Icon: Truck,        color: 'purple' },
+  { key: 'Tok_Penghulu', label: 'Tok Penghulu', role: { ms: 'Pengerusi', en: 'Chairperson' }, Icon: Crown,         color: 'emerald' },
+  { key: 'Mak_Tok',      label: 'Mak Tok',      role: { ms: 'Tukang Masak', en: 'Chef' },     Icon: ChefHat,       color: 'rose' },
+  { key: 'Tokey_Pasar',  label: 'Tokey Pasar',  role: { ms: 'Pembekal', en: 'Supplier' },     Icon: ShoppingBasket,color: 'blue' },
+  { key: 'Bendahari',    label: 'Bendahari',    role: { ms: 'Kewangan', en: 'Finance' },       Icon: Calculator,    color: 'amber' },
+  { key: 'Abang_Lorry',  label: 'Abang Lorry',  role: { ms: 'Logistik', en: 'Logistics' },    Icon: Truck,         color: 'purple' },
 ] as const;
 
 const COLOR_MAP: Record<string, { ring: string; bg: string; icon: string; pulse: string }> = {
@@ -21,9 +21,10 @@ interface Props {
   activeAgent: string | null;
   doneAgents: string[];
   status: string;
+  language?: 'ms' | 'en';
 }
 
-export function AgentStatusBar({ activeAgent, doneAgents, status }: Props) {
+export function AgentStatusBar({ activeAgent, doneAgents, status, language = 'ms' }: Props) {
   return (
     <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
       {AGENTS.map(({ key, label, role, Icon, color }) => {
@@ -65,7 +66,7 @@ export function AgentStatusBar({ activeAgent, doneAgents, status }: Props) {
             <span className={isActive ? 'text-stone-800' : isDone ? 'text-stone-600' : ''}>
               {label}
             </span>
-            <span className="text-stone-400 font-normal hidden sm:inline">· {role}</span>
+            <span className="text-stone-400 font-normal hidden sm:inline">· {role[language]}</span>
 
             <AnimatePresence>
               {isDone && (

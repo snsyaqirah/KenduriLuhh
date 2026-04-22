@@ -6,7 +6,7 @@ function fmt(n: number | null): string {
   return `RM ${n.toLocaleString('en-MY', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export function generateQuotationPdf(data: ParsedOutput, mode: 'katering' | 'rewang') {
+export function generateQuotationPdf(data: ParsedOutput, mode: 'katering' | 'rewang', language: 'ms' | 'en' = 'ms') {
   const doc = new jsPDF({ unit: 'mm', format: 'a4' });
   const W = 210;
   const margin = 20;
@@ -44,8 +44,12 @@ export function generateQuotationPdf(data: ParsedOutput, mode: 'katering' | 'rew
   doc.text('KenduriLuhh', margin, 14);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
-  doc.text(mode === 'katering' ? 'Catering Quotation' : 'Rewang Shopping Summary', margin, 22);
-  doc.text(new Date().toLocaleDateString('en-MY', { day: '2-digit', month: 'long', year: 'numeric' }), W - margin, 22, { align: 'right' });
+  const locale = language === 'ms' ? 'ms-MY' : 'en-MY';
+  const subtitle = mode === 'katering'
+    ? (language === 'en' ? 'Catering Quotation' : 'Sebut Harga Katering')
+    : (language === 'en' ? 'Rewang Shopping Summary' : 'Ringkasan Belian Rewang');
+  doc.text(subtitle, margin, 22);
+  doc.text(new Date().toLocaleDateString(locale, { day: '2-digit', month: 'long', year: 'numeric' }), W - margin, 22, { align: 'right' });
 
   y = 40;
   doc.setTextColor(30, 30, 30);

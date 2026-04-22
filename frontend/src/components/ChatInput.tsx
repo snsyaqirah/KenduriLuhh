@@ -8,6 +8,39 @@ interface Props {
   disabled?: boolean;
 }
 
+const COPY = {
+  en: {
+    modeLabel: 'Select Mode',
+    langLabel: 'Language',
+    eventType:   { label: 'Event Type *',               ph: 'Wedding, Aqiqah, Corporate Dinner…' },
+    pax:         { label: 'Number of Guests (pax) *',   ph: 'e.g. 300' },
+    budget:      { label: 'Budget (RM) *',               ph: 'e.g. 15000' },
+    location:    { label: 'Event Location *',            ph: 'e.g. Shah Alam, Selangor' },
+    date:        { label: 'Event Date *' },
+    dietary:     { label: 'Dietary / Halal Requirements', ph: 'e.g. Halal, no nuts' },
+    margin:      { label: 'Target Profit Margin (%)',    ph: 'e.g. 20' },
+    coordinator: { label: 'Rewang Coordinator Name',     ph: 'e.g. Mak Cik Rohani' },
+    special:     { label: 'Special Requests',            ph: 'e.g. Traditional theme, live cooking, buffet set…' },
+    submit:      '🚀 Start Planning',
+    submitting:  'Agents are negotiating…',
+  },
+  ms: {
+    modeLabel: 'Pilih Mod',
+    langLabel: 'Bahasa',
+    eventType:   { label: 'Jenis Majlis *',               ph: 'Wedding, Aqiqah, Corporate Dinner…' },
+    pax:         { label: 'Bilangan Tetamu (pax) *',      ph: 'cth: 300' },
+    budget:      { label: 'Bajet (RM) *',                 ph: 'cth: 15000' },
+    location:    { label: 'Lokasi Majlis *',              ph: 'cth: Shah Alam, Selangor' },
+    date:        { label: 'Tarikh Majlis *' },
+    dietary:     { label: 'Keperluan Pemakanan / Halal',  ph: 'cth: Halal, tiada kacang' },
+    margin:      { label: 'Target Margin Untung (%)',     ph: 'cth: 20' },
+    coordinator: { label: 'Nama Penyelaras Rewang',       ph: 'cth: Mak Cik Rohani' },
+    special:     { label: 'Permintaan Khas',              ph: 'cth: Tema tradisional, nak ada live cooking, set buffet…' },
+    submit:      '🚀 Mulakan Perancangan',
+    submitting:  'Ejen sedang berunding…',
+  },
+} as const;
+
 export function ChatInput({ onSubmit, disabled }: Props) {
   const [mode, setMode]         = useState<Mode>('katering');
   const [language, setLanguage] = useState<Language>('ms');
@@ -21,8 +54,8 @@ export function ChatInput({ onSubmit, disabled }: Props) {
   const [margin, setMargin]           = useState('');
   const [coordinator, setCoordinator] = useState('');
 
-  // today in YYYY-MM-DD for min date
   const today = new Date().toISOString().split('T')[0];
+  const t = COPY[language];
 
   const valid =
     eventType.trim() &&
@@ -58,15 +91,15 @@ export function ChatInput({ onSubmit, disabled }: Props) {
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-2 flex-1">
           <label className="text-xs font-semibold text-stone-400 uppercase tracking-widest">
-            Pilih Mod / Mode
+            {t.modeLabel}
           </label>
-          <ModeToggle value={mode} onChange={setMode} disabled={disabled} />
+          <ModeToggle value={mode} onChange={setMode} disabled={disabled} language={language} />
         </div>
 
         <div className="flex flex-col gap-2 sm:w-48">
           <label className="flex items-center gap-1.5 text-xs font-semibold text-stone-400 uppercase tracking-widest">
             <Globe size={12} className="text-emerald-600" />
-            Language
+            {t.langLabel}
           </label>
           <div className="relative flex rounded-xl bg-stone-100 p-1 gap-0">
             {(['ms', 'en'] as Language[]).map((lang) => (
@@ -94,18 +127,18 @@ export function ChatInput({ onSubmit, disabled }: Props) {
 
       {/* Grid fields */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <FloatField label="Jenis Majlis *" icon={<Utensils size={15} />}>
+        <FloatField label={t.eventType.label} icon={<Utensils size={15} />}>
           <input
             value={eventType}
             onChange={(e) => setEventType(e.target.value)}
             disabled={disabled}
-            placeholder="Wedding, Aqiqah, Corporate Dinner…"
+            placeholder={t.eventType.ph}
             className={inputCls}
             required
           />
         </FloatField>
 
-        <FloatField label="Bilangan Tetamu (pax) *" icon={<Users size={15} />}>
+        <FloatField label={t.pax.label} icon={<Users size={15} />}>
           <input
             type="number"
             min={10}
@@ -113,37 +146,37 @@ export function ChatInput({ onSubmit, disabled }: Props) {
             value={pax}
             onChange={(e) => setPax(e.target.value)}
             disabled={disabled}
-            placeholder="cth: 300"
+            placeholder={t.pax.ph}
             className={inputCls}
             required
           />
         </FloatField>
 
-        <FloatField label="Bajet (RM) *" icon={<Wallet size={15} />}>
+        <FloatField label={t.budget.label} icon={<Wallet size={15} />}>
           <input
             type="number"
             min={1}
             value={budget}
             onChange={(e) => setBudget(e.target.value)}
             disabled={disabled}
-            placeholder="cth: 15000"
+            placeholder={t.budget.ph}
             className={inputCls}
             required
           />
         </FloatField>
 
-        <FloatField label="Lokasi Majlis *" icon={<MapPin size={15} />}>
+        <FloatField label={t.location.label} icon={<MapPin size={15} />}>
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             disabled={disabled}
-            placeholder="cth: Shah Alam, Selangor"
+            placeholder={t.location.ph}
             className={inputCls}
             required
           />
         </FloatField>
 
-        <FloatField label="Tarikh Majlis *" icon={<Calendar size={15} />}>
+        <FloatField label={t.date.label} icon={<Calendar size={15} />}>
           <input
             type="date"
             min={today}
@@ -155,18 +188,18 @@ export function ChatInput({ onSubmit, disabled }: Props) {
           />
         </FloatField>
 
-        <FloatField label="Keperluan Pemakanan / Halal" icon={<Utensils size={15} />}>
+        <FloatField label={t.dietary.label} icon={<Utensils size={15} />}>
           <input
             value={dietary}
             onChange={(e) => setDietary(e.target.value)}
             disabled={disabled}
-            placeholder="cth: Halal, tiada kacang"
+            placeholder={t.dietary.ph}
             className={inputCls}
           />
         </FloatField>
 
         {mode === 'katering' && (
-          <FloatField label="Target Margin Untung (%)" icon={<Percent size={15} />}>
+          <FloatField label={t.margin.label} icon={<Percent size={15} />}>
             <input
               type="number"
               min={0}
@@ -174,32 +207,32 @@ export function ChatInput({ onSubmit, disabled }: Props) {
               value={margin}
               onChange={(e) => setMargin(e.target.value)}
               disabled={disabled}
-              placeholder="cth: 20"
+              placeholder={t.margin.ph}
               className={inputCls}
             />
           </FloatField>
         )}
 
         {mode === 'rewang' && (
-          <FloatField label="Nama Penyelaras Rewang" icon={<User size={15} />}>
+          <FloatField label={t.coordinator.label} icon={<User size={15} />}>
             <input
               value={coordinator}
               onChange={(e) => setCoordinator(e.target.value)}
               disabled={disabled}
-              placeholder="cth: Mak Cik Rohani"
+              placeholder={t.coordinator.ph}
               className={inputCls}
             />
           </FloatField>
         )}
       </div>
 
-      <FloatField label="Permintaan Khas" icon={<FileText size={15} />}>
+      <FloatField label={t.special.label} icon={<FileText size={15} />}>
         <textarea
           rows={2}
           value={special}
           onChange={(e) => setSpecial(e.target.value)}
           disabled={disabled}
-          placeholder="cth: Tema tradisional, nak ada live cooking, set buffet…"
+          placeholder={t.special.ph}
           className={`${inputCls} resize-none`}
         />
       </FloatField>
@@ -215,7 +248,7 @@ export function ChatInput({ onSubmit, disabled }: Props) {
             : 'bg-stone-100 text-stone-400 cursor-not-allowed',
         ].join(' ')}
       >
-        {disabled ? 'Ejen sedang berunding…' : '🚀 Mulakan Perancangan'}
+        {disabled ? t.submitting : t.submit}
       </button>
     </form>
   );

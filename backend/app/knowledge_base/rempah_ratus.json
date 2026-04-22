@@ -1,0 +1,94 @@
+{
+  "rempah_blends": [
+    {
+      "id": "rempah-rendang",
+      "name": "Rempah Rendang",
+      "name_en": "Rendang Spice Blend",
+      "used_in": ["rendang-daging", "rendang-ayam", "gulai-kawah"],
+      "components": [
+        {"ingredient": "cili_kering", "ratio_percent": 30, "notes": "Soak in hot water 15 min before blending"},
+        {"ingredient": "bawang_merah", "ratio_percent": 25},
+        {"ingredient": "bawang_putih", "ratio_percent": 15},
+        {"ingredient": "serai", "ratio_percent": 10, "notes": "Bruise before adding"},
+        {"ingredient": "lengkuas", "ratio_percent": 10},
+        {"ingredient": "kunyit_hidup", "ratio_percent": 10}
+      ],
+      "quantity_per_kg_meat_gram": 150,
+      "blending_method": "Blend halus (fine paste) atau tumbuk dalam lesung batu",
+      "instant_substitute": "Adabi Serbuk Rendang (35g packet per 500g daging)",
+      "instant_cost_per_packet": 1.80,
+      "notes": "The ratio is a starting point — adjust cili for desired heat level."
+    },
+    {
+      "id": "rempah-nasi-minyak",
+      "name": "Rempah Nasi Minyak",
+      "name_en": "Spiced Rice Spice Mix",
+      "used_in": ["nasi-minyak"],
+      "components": [
+        {"ingredient": "bunga_lawang", "ratio_percent": 20, "notes": "Star anise — 2-3 kuntum per gantang beras"},
+        {"ingredient": "kayu_manis", "ratio_percent": 20, "notes": "1 batang per gantang"},
+        {"ingredient": "bunga_cengkih", "ratio_percent": 15, "notes": "5-6 biji per gantang"},
+        {"ingredient": "buah_pelaga", "ratio_percent": 15, "notes": "Cardamom, bruised"},
+        {"ingredient": "bawang_merah", "ratio_percent": 30, "notes": "Fried until golden before adding rice"}
+      ],
+      "quantity_per_kg_rice_gram": 15,
+      "blending_method": "Tidak perlu blend — masukkan utuh ke dalam minyak panas",
+      "instant_substitute": "Adabi Rempah Nasi Minyak (50g sachet per gantang beras)",
+      "instant_cost_per_packet": 2.50,
+      "notes": "Whole spices are fried in ghee (minyak sapi) before adding rice and water."
+    },
+    {
+      "id": "rempah-kari-ayam",
+      "name": "Rempah Kari Ayam",
+      "name_en": "Chicken Curry Spice Blend",
+      "used_in": ["kari-ayam", "kari-kambing", "dalca"],
+      "components": [
+        {"ingredient": "serbuk_kari", "ratio_percent": 40, "notes": "Baba's or Adabi brand"},
+        {"ingredient": "bawang_merah", "ratio_percent": 25},
+        {"ingredient": "bawang_putih", "ratio_percent": 15},
+        {"ingredient": "halia", "ratio_percent": 10},
+        {"ingredient": "kunyit_hidup", "ratio_percent": 10}
+      ],
+      "quantity_per_kg_meat_gram": 80,
+      "blending_method": "Blend atau kisar bawang, halia, kunyit. Mix dengan serbuk kari dan sedikit air.",
+      "instant_substitute": "Adabi Serbuk Kari Ayam (250g tin) — 3 sudu makan per kg ayam",
+      "instant_cost_per_packet": 8.50,
+      "notes": "Add santan at the end for richer taste."
+    },
+    {
+      "id": "rempah-tomato",
+      "name": "Bahan Nasi Tomato",
+      "name_en": "Tomato Rice Base",
+      "used_in": ["nasi-tomato"],
+      "components": [
+        {"ingredient": "sos_tomato", "ratio_percent": 40, "notes": "Maggi or Heinz brand"},
+        {"ingredient": "bawang_merah", "ratio_percent": 25},
+        {"ingredient": "bawang_putih", "ratio_percent": 15},
+        {"ingredient": "rempah-nasi-minyak", "ratio_percent": 20, "notes": "Same whole spices as nasi minyak"}
+      ],
+      "quantity_per_kg_rice_gram": 150,
+      "blending_method": "Tumis bawang dan rempah, masukkan sos tomato, kemudian masukkan beras",
+      "instant_substitute": "Adabi Serbuk Nasi Tomato (40g sachet per gantang beras)",
+      "instant_cost_per_packet": 2.20,
+      "notes": "Add susu sejat (evaporated milk) for extra richness."
+    },
+    {
+      "id": "sambal-base",
+      "name": "Base Sambal",
+      "name_en": "Sambal Paste Base",
+      "used_in": ["sambal-udang", "ayam-masak-merah"],
+      "components": [
+        {"ingredient": "cili_kering", "ratio_percent": 35, "notes": "Blend with water until smooth"},
+        {"ingredient": "bawang_merah", "ratio_percent": 30},
+        {"ingredient": "bawang_putih", "ratio_percent": 15},
+        {"ingredient": "belacan", "ratio_percent": 10, "notes": "Toasted first"},
+        {"ingredient": "asam_jawa", "ratio_percent": 10, "notes": "Soaked in water, seeds removed"}
+      ],
+      "quantity_per_serving_gram": 80,
+      "blending_method": "Blend semua bahan, tumis dalam minyak sehingga pecah minyak",
+      "instant_substitute": "Adabi Sambal Tumis Paste (230g) — suitable for udang and ayam",
+      "instant_cost_per_packet": 5.50,
+      "notes": "'Pecah minyak' (oil separates) is the sign sambal is fully cooked."
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "rules": [
+    {
+      "id": "h001",
+      "rule": "No pork or pork derivatives",
+      "trigger_keywords": ["babi", "pork", "lard", "lemak babi", "gelatin babi", "pork gelatin", "ham", "bacon"],
+      "severity": "HARAM_REJECT",
+      "action": "Remove ingredient completely. No substitution possible.",
+      "note": "Zero tolerance. Any dish containing these ingredients is haram."
+    },
+    {
+      "id": "h002",
+      "rule": "No alcohol in cooking",
+      "trigger_keywords": ["arak masak", "cooking wine", "shaoxing wine", "mirin", "sake", "beer", "wine", "alcohol", "ethanol"],
+      "severity": "HARAM_REJECT",
+      "action": "Substitute with: cuka putih (white vinegar), air asam jawa (tamarind water), or apple cider vinegar.",
+      "note": "Even 'cooking wine' is haram. Tamarind is the Malaysian standard substitute."
+    },
+    {
+      "id": "h003",
+      "rule": "Gelatin source verification",
+      "trigger_keywords": ["gelatin", "jelly", "agar"],
+      "severity": "WARNING_CHECK",
+      "action": "Verify gelatin source. Use agar-agar powder (plant-based) for Malaysian desserts — it is halal.",
+      "note": "Agar-agar is always safe. Gelatin from beef must have JAKIM-certified halal cert."
+    },
+    {
+      "id": "h004",
+      "rule": "Meat supplier halal certification",
+      "applies_to": ["daging_lembu", "daging_kambing", "ayam_broiler", "ayam_kampung"],
+      "severity": "WARNING_FLAG",
+      "action": "Request supplier's JAKIM halal certificate before purchase.",
+      "note": "All meat suppliers in our directory hold JAKIM certification."
+    },
+    {
+      "id": "h005",
+      "rule": "No blood products",
+      "trigger_keywords": ["darah", "blood pudding", "black pudding"],
+      "severity": "HARAM_REJECT",
+      "action": "Remove completely. Not used in Malaysian cuisine.",
+      "note": "Extremely rare in Malaysian cooking context."
+    },
+    {
+      "id": "h006",
+      "rule": "Cross-contamination prevention",
+      "severity": "BEST_PRACTICE",
+      "action": "Use separate utensils, cutting boards, and cookware for halal food. Wash with running water.",
+      "note": "Critical for catering operations serving mixed dietary requirements."
+    }
+  ],
+  "safe_ingredients": [
+    "All vegetables and fruits",
+    "Beras (all varieties)",
+    "Agar-agar powder",
+    "Santan (coconut milk)",
+    "All spices and rempah ratus",
+    "Gula pasir, gula melaka",
+    "Minyak masak sawit",
+    "Telur (eggs — halal by default)",
+    "Dal/lentils",
+    "Susu sejat, susu cair (canned milk)"
+  ]
+}

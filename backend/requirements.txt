@@ -1,0 +1,24 @@
+# AutoGen 0.4 — Microsoft Agent Framework
+autogen-agentchat~=0.4
+autogen-ext[azure]~=0.4
+
+# Web framework
+fastapi==0.115.5
+uvicorn[standard]==0.32.0
+sse-starlette==2.1.3
+
+# Data validation
+pydantic==2.9.2
+pydantic-settings==2.6.1
+
+# Azure OpenAI (pulled in by autogen-ext but pinned for stability)
+openai>=1.54.3
+
+# Utilities
+python-dotenv==1.0.1
+python-multipart==0.0.12
+
+# Testing
+pytest==8.3.3
+pytest-asyncio==0.24.0
+httpx==0.27.2

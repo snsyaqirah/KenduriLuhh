@@ -10,11 +10,11 @@ from app.config import settings
 from app.agents.base_agent import build_tokey_pasar_prompt, build_model_client_args
 
 
-def create_tokey_pasar(mode: str, ingredient_table: str = "") -> AssistantAgent:
+def create_tokey_pasar(mode: str, language: str = "ms", ingredient_table: str = "") -> AssistantAgent:
     client = AzureOpenAIChatCompletionClient(**build_model_client_args(settings))
     return AssistantAgent(
         name="Tokey_Pasar",
         model_client=client,
         description="Pakar Perolehan & Inventori Bahan. Pilih untuk semakan harga di Pasar Borong, ketersediaan stok, atau cadangan pengganti bahan yang lebih murah.",
-        system_message=build_tokey_pasar_prompt(mode, ingredient_table),
+        system_message=build_tokey_pasar_prompt(mode, language, ingredient_table),
     )

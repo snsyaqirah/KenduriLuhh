@@ -28,7 +28,7 @@ async def start_chat(request: CateringRequest):
     Returns session_id immediately — agents do NOT run yet.
     Open GET /api/chat/{session_id}/stream to start and watch live.
     """
-    session_id = session_service.create_session(request.mode)
+    session_id = session_service.create_session(request.mode, request.language)
     session_service.store_request(session_id, request.model_dump(mode="json"))
     return ChatStartResponse(
         session_id=session_id,
@@ -90,7 +90,7 @@ async def stream_chat(session_id: str):
     async def _live_stream():
         session_service.set_running(session_id)
         try:
-            team = create_team(mode=session["mode"])
+            team = create_team(mode=session["mode"], language=session.get("language", "ms"))
             task_text = build_task_string(request_data)
 
             async for agent_name, content in run_team_stream(team, task_text):

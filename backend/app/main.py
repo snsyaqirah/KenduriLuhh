@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="KenduriLuhh API",
-    description="AI-powered multi-agent catering management system — iNextLabs Hackathon 2026",
+    description="AI-powered multi-agent catering management system — iNextLabs - Hackathon 2026",
     version="1.0.0",
     lifespan=lifespan,
 )
@@ -48,7 +48,7 @@ app.include_router(knowledge.router, prefix="/api", tags=["Knowledge Base"])
 async def root():
     return {
         "project": "KenduriLuhh",
-        "tagline": "AI Catering Manager — Lima Ejen, Satu Majlis",
+        "tagline": "AI Catering Manager — The Future of Rewang",
         "docs": "/docs",
         "health": "/api/health",
     }

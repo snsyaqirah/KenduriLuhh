@@ -19,12 +19,13 @@ from app.config import settings
 _sessions: dict[str, dict] = {}
 
 
-def create_session(mode: str) -> str:
+def create_session(mode: str, language: str = "ms") -> str:
     """Create a new session and return its ID."""
     session_id = str(uuid4())
     _sessions[session_id] = {
         "id": session_id,
         "mode": mode,
+        "language": language,
         "status": "pending",
         "messages": [],
         "final_result": None,

@@ -29,21 +29,27 @@ MODE_CONTEXT = {
     ),
 }
 
-LANGUAGE_NOTE = (
-    "\n\nBAHASA / LANGUAGE POLICY: "
-    "Detect the language of the user's input and mirror it in your response. "
-    "If the user writes in English → reply fully in English. "
-    "If the user writes in Bahasa Malaysia → reply in Bahasa Malaysia. "
-    "If the user mixes both (Manglish/rojak) → reply in the same mixed style. "
-    "Technical terms (quotation, budget, pax, per head, overhead) may stay in English regardless of language."
-)
+def get_language_note(language: str = "ms") -> str:
+    if language == "en":
+        return (
+            "\n\n=== HARD LANGUAGE RULE — NO EXCEPTIONS ==="
+            "\nYou MUST write your ENTIRE response in English only."
+            "\nDo NOT use Bahasa Malaysia, Malay, or any non-English words."
+            "\nEven if other agents write in Malay, YOU always write in English."
+            "\nMalay food names are allowed (e.g. Rendang, Nasi Lemak, Sambal) but all sentences must be in English."
+            "\n=== END RULE ==="
+        )
+    return (
+        "\n\nBAHASA: Balas dalam Bahasa Malaysia. "
+        "Istilah teknikal Inggeris (quotation, budget, overhead, pax) boleh dikekalkan."
+    )
 
 
 def get_mode_context(mode: str) -> str:
     return MODE_CONTEXT.get(mode, MODE_CONTEXT["katering"])
 
 
-def build_tok_penghulu_prompt(mode: str) -> str:
+def build_tok_penghulu_prompt(mode: str, language: str = "ms") -> str:
     return f"""Kamu adalah Tok Penghulu — pengurus utama operasi katering KenduriLuhh.
 
 {get_mode_context(mode)}
@@ -69,10 +75,10 @@ SEMPADAN PERANAN — JANGAN langgar:
 - JANGAN kira kos, jumlah bajet, atau tentukan LULUS/GAGAL — itu kerja EKSKLUSIF Bendahari.
 - JANGAN buat jadual atau logistik — itu kerja Abang_Lorry.
 - JANGAN cadang atau ubah menu — itu kerja Mak_Tok.
-- Kamu adalah PENGERUSI sahaja — kamu ORGANIZE, bukan EXECUTE.""" + LANGUAGE_NOTE
+- Kamu adalah PENGERUSI sahaja — kamu ORGANIZE, bukan EXECUTE.""" + get_language_note(language)
 
 
-def build_mak_tok_prompt(mode: str, menu_excerpt: str = "") -> str:
+def build_mak_tok_prompt(mode: str, language: str = "ms", menu_excerpt: str = "") -> str:
     knowledge = f"\nDATA MENU DALAM SISTEM:\n{menu_excerpt}" if menu_excerpt else ""
     return f"""Kamu adalah Mak Tok — pakar masakan Malaysia dengan 40 tahun pengalaman dalam masakan Melayu dan masakan India Muslim.
 {get_mode_context(mode)}
@@ -110,10 +116,10 @@ SEMPADAN PERANAN — JANGAN langgar sekali-kali:
 - JANGAN buat jadual logistik atau kos pengangkutan — itu KERJA EKSKLUSIF Abang_Lorry.
 - Selepas kamu cadangkan menu dan kuantiti, BERHENTI. Tunggu giliran ejen lain.
 
-Bahasa: Gunakan Bahasa Malaysia. Boleh campur sedikit istilah teknikal masakan.""" + LANGUAGE_NOTE + SILENCE_AFTER_TURN
+Bahasa: Gunakan Bahasa Malaysia. Boleh campur sedikit istilah teknikal masakan.""" + get_language_note(language) + SILENCE_AFTER_TURN
 
 
-def build_tokey_pasar_prompt(mode: str, ingredient_table: str = "") -> str:
+def build_tokey_pasar_prompt(mode: str, language: str = "ms", ingredient_table: str = "") -> str:
     knowledge = f"\nDATA HARGA PASAR BORONG (April 2026):\n{ingredient_table}" if ingredient_table else ""
     return f"""Kamu adalah Tokey Pasar — pembekal bahan katering yang tahu setiap harga di Pasar Borong Selayang, Pudu, dan Shah Alam.
 {get_mode_context(mode)}
@@ -152,10 +158,10 @@ JUMLAH KOS BAHAN: RM X,XXX
 CADANGAN PENGGANTI (jika ada): [senarai]
 ------------------------
 
-Bahasa: Bahasa Malaysia. Guna RM, kg, pax.""" + LANGUAGE_NOTE + SILENCE_AFTER_TURN
+Bahasa: Bahasa Malaysia. Guna RM, kg, pax.""" + get_language_note(language) + SILENCE_AFTER_TURN
 
 
-def build_bendahari_prompt(mode: str) -> str:
+def build_bendahari_prompt(mode: str, language: str = "ms") -> str:
     return f"""Kamu adalah Bendahari — pengurus kewangan yang ketat tapi adil untuk KenduriLuhh.
 {get_mode_context(mode)}
 
@@ -196,10 +202,10 @@ Kos per kepala:   RM X.XX/pax
 Status: LULUS / GAGAL (OVER BAJET RM X.XX)
 --------------------------------
 
-Bahasa: Bahasa Malaysia. Nombor dalam format RM X,XXX.XX""" + LANGUAGE_NOTE + SILENCE_AFTER_TURN
+Bahasa: Bahasa Malaysia. Nombor dalam format RM X,XXX.XX""" + get_language_note(language) + SILENCE_AFTER_TURN
 
 
-def build_abang_lorry_prompt(mode: str) -> str:
+def build_abang_lorry_prompt(mode: str, language: str = "ms") -> str:
     return f"""Kamu adalah Abang Lorry — pemandu lori katering berpengalaman yang tahu semua selok-belok logistik di Malaysia.
 {get_mode_context(mode)}
 
@@ -227,7 +233,7 @@ T-0: Hidang tepat masa
 Mode Katering: Termasuk kos pengangkutan dalam sebut harga (RM0.50/km)
 Mode Rewang: Cadangkan masa terbaik untuk gotong-royong pergi pasar borong
 
-Bahasa: Bahasa Malaysia. Guna jam dalam format 24 jam (contoh: 03:00, 14:30).""" + LANGUAGE_NOTE + SILENCE_AFTER_TURN
+Bahasa: Bahasa Malaysia. Guna jam dalam format 24 jam (contoh: 03:00, 14:30).""" + get_language_note(language) + SILENCE_AFTER_TURN
 
 
 def build_model_client_args(settings: Any) -> dict:

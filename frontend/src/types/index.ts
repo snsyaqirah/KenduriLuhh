@@ -1,0 +1,39 @@
+export type Mode = 'katering' | 'rewang';
+export type Language = 'ms' | 'en';
+
+export interface AgentMessage {
+  agent: string;
+  content: string;
+  timestamp: string;
+}
+
+export interface SSEEvent {
+  type: 'agent_message' | 'done' | 'error';
+  agent?: string;
+  content?: string;
+  timestamp?: string;
+  total_messages?: number;
+  message?: string;
+}
+
+export interface ChatStartResponse {
+  session_id: string;
+  mode: Mode;
+  message: string;
+}
+
+// Must exactly match backend CateringRequest model
+export interface CateringRequest {
+  mode: Mode;
+  language: Language;
+  event_type: string;
+  pax: number;
+  budget_myr: number;
+  event_date: string;           // required — YYYY-MM-DD
+  event_location: string;       // required
+  menu_preferences?: string[];
+  dietary_notes?: string;
+  special_requests?: string;
+  profit_margin_percent?: number;
+  coordinator_name?: string;
+}

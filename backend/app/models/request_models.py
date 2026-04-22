@@ -20,6 +20,7 @@ def _clean(value: str) -> str:
 
 class CateringRequest(BaseModel):
     mode: Literal["katering", "rewang"]
+    language: Literal["ms", "en"] = Field(default="ms", description="Response language: ms = Bahasa Malaysia, en = English")
     event_type: str = Field(
         default="wedding",
         description="Type of event: wedding, aqiqah, birthday, corporate, kenduri",

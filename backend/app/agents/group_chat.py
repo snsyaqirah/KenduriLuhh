@@ -70,23 +70,24 @@ Return ONLY the agent name, nothing else.
 """
 
 
-def create_team(mode: str = "katering") -> SelectorGroupChat:
+def create_team(mode: str = "katering", language: str = "ms") -> SelectorGroupChat:
     """
     Creates and returns a configured 5-agent SelectorGroupChat team.
 
     Args:
         mode: "katering" (professional) or "rewang" (DIY kenduri)
+        language: "ms" (Bahasa Malaysia) or "en" (English)
 
     Returns:
         A ready-to-run SelectorGroupChat instance.
     """
     selector_client = AzureOpenAIChatCompletionClient(**build_model_client_args(settings))
 
-    tok_penghulu = create_tok_penghulu(mode)
-    mak_tok = create_mak_tok(mode)
-    tokey_pasar = create_tokey_pasar(mode)
-    bendahari = create_bendahari(mode)
-    abang_lorry = create_abang_lorry(mode)
+    tok_penghulu = create_tok_penghulu(mode, language)
+    mak_tok = create_mak_tok(mode, language)
+    tokey_pasar = create_tokey_pasar(mode, language)
+    bendahari = create_bendahari(mode, language)
+    abang_lorry = create_abang_lorry(mode, language)
 
     # TextMentionTermination: ends when any agent writes "SELESAI"
     # MaxMessageTermination: safety cap to avoid infinite loops and burning tokens

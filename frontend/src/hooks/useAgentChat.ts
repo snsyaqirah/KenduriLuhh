@@ -7,20 +7,19 @@ const RETRY_DELAY_MS = 2000;
 
 const getStatus = () => useChatStore.getState().status;
 
-function categoriseError(status: number | null, err?: unknown): string {
-  if (status === null) {
-    // No HTTP response — backend not reachable
-    return 'Backend tidak dapat dihubungi. Pastikan server berjalan pada port 8000.';
+function categoriseError(status: number | null, language: 'ms' | 'en', err?: unknown): string {
+  if (language === 'en') {
+    if (status === null) return 'Backend unreachable. Make sure the server is running on port 8000.';
+    if (status === 401 || status === 403) return 'Access denied. Check your Azure OpenAI configuration.';
+    if (status === 422) return 'Incomplete form data. Please check all required fields.';
+    if (status >= 500) return 'Internal server error. Check backend logs for details.';
+    if (err instanceof Error) return err.message;
+    return 'Unknown connection error.';
   }
-  if (status === 401 || status === 403) {
-    return 'Akses ditolak. Semak konfigurasi Azure OpenAI.';
-  }
-  if (status === 422) {
-    return 'Data borang tidak lengkap. Sila semak semua medan wajib.';
-  }
-  if (status >= 500) {
-    return 'Ralat server dalaman. Semak log backend untuk butiran.';
-  }
+  if (status === null) return 'Backend tidak dapat dihubungi. Pastikan server berjalan pada port 8000.';
+  if (status === 401 || status === 403) return 'Akses ditolak. Semak konfigurasi Azure OpenAI.';
+  if (status === 422) return 'Data borang tidak lengkap. Sila semak semua medan wajib.';
+  if (status >= 500) return 'Ralat server dalaman. Semak log backend untuk butiran.';
   if (err instanceof Error) return err.message;
   return 'Ralat sambungan yang tidak diketahui.';
 }
@@ -77,8 +76,11 @@ export function useAgentChat() {
           connectStream(sessionId, attempt + 1);
         }, RETRY_DELAY_MS);
       } else {
+        const lang = useChatStore.getState().language;
         useChatStore.getState().setError(
-          `Sambungan terputus selepas ${MAX_RETRIES} percubaan. Pastikan backend berjalan dan cuba semula.`
+          lang === 'en'
+            ? `Connection dropped after ${MAX_RETRIES} attempts. Make sure the backend is running and try again.`
+            : `Sambungan terputus selepas ${MAX_RETRIES} percubaan. Pastikan backend berjalan dan cuba semula.`
         );
       }
     };
@@ -102,7 +104,7 @@ export function useAgentChat() {
 
       if (!res.ok) {
         const body = await res.json().catch(() => null);
-        let msg = categoriseError(httpStatus);
+        let msg = categoriseError(httpStatus, request.language);
         if (body?.detail) {
           if (Array.isArray(body.detail)) {
             msg = body.detail
@@ -125,7 +127,7 @@ export function useAgentChat() {
 
       connectStream(sessionId, 0);
     } catch (err) {
-      store.setError(categoriseError(httpStatus, err));
+      store.setError(categoriseError(httpStatus, request.language, err));
     }
   }, [store, connectStream]);
 

@@ -11,7 +11,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import settings
-from app.api.routes import health, chat, knowledge
+from app.api.routes import health, chat, knowledge, maps
 
 
 @asynccontextmanager
@@ -42,6 +42,7 @@ app.add_middleware(
 app.include_router(health.router, prefix="/api", tags=["System"])
 app.include_router(chat.router, prefix="/api", tags=["Agent Chat"])
 app.include_router(knowledge.router, prefix="/api", tags=["Knowledge Base"])
+app.include_router(maps.router, prefix="/api", tags=["Azure Maps"])
 
 
 @app.get("/", include_in_schema=False)

@@ -13,6 +13,10 @@ class Settings(BaseSettings):
     WEATHERAPI_KEY: str = ""
     REDAHLUHH_API_URL: str = "https://redahluhh.onrender.com"
 
+    # Azure Maps (optional — route feature disabled if key is empty)
+    AZURE_MAPS_KEY: str = ""
+    AZURE_MAPS_CLIENT_ID: str = "bbb5fdab-c8cb-4d2f-8f3f-9ddc3500a030"
+
     # Stored as comma-separated string; use cors_origins_list property
     CORS_ORIGINS: str = "http://localhost:5173,http://localhost:3000"
     SESSION_TTL_SECONDS: int = 3600

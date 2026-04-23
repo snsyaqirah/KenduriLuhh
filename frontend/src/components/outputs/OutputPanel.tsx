@@ -5,6 +5,7 @@ import { BudgetBreakdown } from './BudgetBreakdown';
 import { LogisticsTimeline } from './LogisticsTimeline';
 import { QuotationCard } from './QuotationCard';
 import { ShoppingList } from './ShoppingList';
+import { RouteMap } from './RouteMap';
 import { DecisionFlow } from '../DecisionFlow';
 import { AuditLogPanel } from '../AuditLogPanel';
 import { parseMessages } from '../../utils/parseMessages';
@@ -91,6 +92,9 @@ export function OutputPanel({ messages, mode, language, onReset, originalRequest
             )}
             {data.logistics.length > 0 && (
               <LogisticsTimeline events={data.logistics} language={language} />
+            )}
+            {originalRequest?.event_location && (
+              <RouteMap eventLocation={originalRequest.event_location} language={language} />
             )}
           </div>
         )}

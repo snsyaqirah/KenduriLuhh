@@ -44,6 +44,7 @@ export function useAgentChat() {
           agent: event.agent,
           content: event.content,
           timestamp: event.timestamp ?? new Date().toISOString(),
+          audit: event.audit,
         });
         setTimeout(() => useChatStore.getState().setTypingAgent(null), 800);
       }
@@ -92,6 +93,7 @@ export function useAgentChat() {
     store.setMode(request.mode);
     store.setLanguage(request.language);
     store.setStatus('loading');
+    store.setOriginalRequest(request);   // store for guest spike
 
     let httpStatus: number | null = null;
     try {

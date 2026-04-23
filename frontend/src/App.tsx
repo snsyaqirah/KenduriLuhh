@@ -7,7 +7,7 @@ import { useAgentChat } from './hooks/useAgentChat';
 import { stripMd } from './utils/parseMessages';
 
 export default function App() {
-  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, startChat, stopChat } = useAgentChat();
+  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, startChat, stopChat } = useAgentChat();
 
   const isActive = status === 'loading' || status === 'running' || status === 'reconnecting';
   const showFeed = messages.length > 0 || isActive;
@@ -193,6 +193,8 @@ export default function App() {
                         mode={mode}
                         onReset={stopChat}
                         language={language}
+                        originalRequest={originalRequest}
+                        onSpikeUpdate={startChat}
                       />
                     </motion.div>
                   ) : (

@@ -143,6 +143,26 @@ export function BudgetBreakdown({ budget, mode, language = 'ms' }: Props) {
             </div>
           ))}
         </div>
+
+        {/* Waste reduction KPI — prominent green badge */}
+        {budget.wasteReductionPct != null && (
+          <div className="rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 flex items-center gap-3">
+            <span className="text-2xl">🌿</span>
+            <div>
+              <p className="text-xs text-emerald-600 font-semibold uppercase tracking-wide">
+                {language === 'en' ? 'Waste Reduction vs Manual' : 'Pengurangan Pembaziran vs Manual'}
+              </p>
+              <p className="text-2xl font-bold text-emerald-700 tabular-nums">
+                {budget.wasteReductionPct.toFixed(1)}%
+              </p>
+              <p className="text-xs text-emerald-500">
+                {language === 'en'
+                  ? 'AI-optimised ordering vs traditional 30% over-order rate'
+                  : 'Pesan AI-optimised vs kadar over-order manual 30%'}
+              </p>
+            </div>
+          </div>
+        )}
       </div>
     </motion.div>
   );

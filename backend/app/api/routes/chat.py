@@ -7,6 +7,7 @@ GET  /api/chat/{id}/result     → Poll for full result (pending / running / don
 """
 
 import json
+import re
 from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
@@ -21,6 +22,75 @@ from app.agents.group_chat import create_team, run_team_stream
 from app.config import settings
 
 router = APIRouter(prefix="/chat")
+
+
+def _classify_action(agent: str, content: str) -> dict:
+    """
+    Classify what an agent did and extract key outputs for the audit trail.
+    This is the JSON signature Dharun mentioned — makes agent decisions traceable.
+    """
+    c = content.lower()
+
+    if agent == "Tok_Penghulu":
+        if "selesai" in c:
+            return {"action": "SESSION_CLOSE", "status": "SUCCESS"}
+        return {"action": "SESSION_OPEN", "status": "SUCCESS"}
+
+    if agent == "Mak_Tok":
+        is_revision = any(w in c for w in [
+            "revisi", "alter", "tukar", "kurang", "pinda", "revised", "cheaper", "alternative", "ekonomi", "economy"
+        ])
+        action = "MENU_REVISION" if is_revision else "MENU_PROPOSAL"
+        items = re.findall(r"(?m)^\s*\d+\.\s+\*?\*?([A-Za-z][^*\n(]+)", content)
+        dishes = [i.strip().split("(")[0].strip() for i in items[:5] if len(i.strip()) > 2]
+        return {"action": action, "key_outputs": {"dishes": dishes}, "status": "SUCCESS"}
+
+    if agent == "Tokey_Pasar":
+        rm = re.search(
+            r"(?:JUMLAH KOS BAHAN|TOTAL INGREDIENT COST)[:\s]+RM\s?([\d,]+)",
+            content, re.IGNORECASE
+        )
+        mahal = len(re.findall(r"⚠️\s*(?:MAHAL|EXPENSIVE)", content))
+        substitutes = len(re.findall(r"→", content))
+        return {
+            "action": "PRICE_REPORT",
+            "key_outputs": {
+                "total_ingredient_cost_myr": rm.group(1) if rm else None,
+                "expensive_flags": mahal,
+                "substitutes_suggested": substitutes,
+            },
+            "status": "SUCCESS",
+        }
+
+    if agent == "Bendahari":
+        rejected = bool(re.search(r"\bGAGAL\b|\bFAILED\b|over bajet|over budget", content, re.IGNORECASE))
+        quotation = re.search(r"(?:SEBUT HARGA|QUOTATION)[:\s]+RM\s?([\d,]+)", content, re.IGNORECASE)
+        variance = re.search(r"over\s+(?:bajet|budget)\s+RM\s?([\d,]+)", content, re.IGNORECASE)
+        waste = re.search(r"(?:waste reduction|pengurangan pembaziran)[:\s]+(\d+(?:\.\d+)?)\s*%", content, re.IGNORECASE)
+        margin = re.search(r"margin[^%\n]*?(\d+(?:\.\d+)?)\s*%", content, re.IGNORECASE)
+        per_head = re.search(r"(?:per kepala|per head|per pax)[:\s]+RM\s?([\d,]+(?:\.\d+)?)", content, re.IGNORECASE)
+        return {
+            "action": "BUDGET_AUDIT",
+            "key_outputs": {
+                "quotation_myr": quotation.group(1) if quotation else None,
+                "variance_myr": variance.group(1) if variance else None,
+                "waste_reduction_pct": waste.group(1) if waste else None,
+                "margin_pct": margin.group(1) if margin else None,
+                "per_head_myr": per_head.group(1) if per_head else None,
+            },
+            "status": "REJECTED" if rejected else "APPROVED",
+        }
+
+    if agent == "Abang_Lorry":
+        t_steps = len(re.findall(r"\bT-\d+\b", content))
+        weather_flag = bool(re.search(r"(?:monsun|banjir|flood|hujan|rain|weather|cuaca)", content, re.IGNORECASE))
+        return {
+            "action": "LOGISTICS_PLAN",
+            "key_outputs": {"timeline_steps": t_steps, "weather_risk_flagged": weather_flag},
+            "status": "SUCCESS",
+        }
+
+    return {"action": "SPEAK", "status": "SUCCESS"}
 
 
 @router.post("/start", response_model=ChatStartResponse, status_code=202)
@@ -45,9 +115,10 @@ async def stream_chat(session_id: str):
     SSE endpoint — runs the 5-agent team and streams each message as an event.
 
     SSE event shapes:
-      {"type": "agent_message", "agent": "<name>", "content": "<text>", "timestamp": "<iso>"}
-      {"type": "done",          "total_messages": <int>}
-      {"type": "error",         "message": "<text>"}
+      {"type": "agent_message", "agent": "<name>", "content": "<text>",
+       "timestamp": "<iso>", "audit": {"action": "...", "status": "...", "key_outputs": {...}}}
+      {"type": "done",  "total_messages": <int>}
+      {"type": "error", "message": "<text>"}
 
     Reconnect behaviour:
       - pending  → starts agents fresh
@@ -61,11 +132,9 @@ async def stream_chat(session_id: str):
 
     status = session["status"]
 
-    # Already running — reject double-connect
     if status == "running":
         raise HTTPException(status_code=409, detail="Session is already streaming")
 
-    # Done — replay stored messages so frontend can reconnect
     if status == "done":
         async def _replay():
             for msg in session["messages"]:
@@ -74,17 +143,16 @@ async def stream_chat(session_id: str):
                     "agent": msg["agent"],
                     "content": msg["content"],
                     "timestamp": msg["timestamp"],
+                    "audit": msg.get("audit"),
                 })}
             yield {"data": json.dumps({"type": "done", "total_messages": len(session["messages"])})}
         return EventSourceResponse(_replay())
 
-    # Error — replay error event
     if status == "error":
         async def _err():
             yield {"data": json.dumps({"type": "error", "message": session.get("error", "Unknown error")})}
         return EventSourceResponse(_err())
 
-    # Pending — start agents and stream live
     request_data = session.get("request_payload")
     if not request_data:
         raise HTTPException(status_code=400, detail="No request payload stored for this session")
@@ -113,12 +181,14 @@ async def stream_chat(session_id: str):
                     return
 
                 ts = datetime.utcnow().isoformat()
-                session_service.add_message(session_id, agent_name, content)
+                audit = _classify_action(agent_name, content)
+                session_service.add_message(session_id, agent_name, content, audit)
                 yield {"data": json.dumps({
                     "type": "agent_message",
                     "agent": agent_name,
                     "content": content,
                     "timestamp": ts,
+                    "audit": audit,
                 })}
 
         except Exception as exc:
@@ -130,10 +200,7 @@ async def stream_chat(session_id: str):
 
 @router.get("/{session_id}/result", response_model=ChatResultResponse)
 async def get_result(session_id: str):
-    """
-    Poll for the result of a chat session.
-    Status values: pending | running | done | error
-    """
+    """Poll for the result of a chat session."""
     session = session_service.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found or expired")

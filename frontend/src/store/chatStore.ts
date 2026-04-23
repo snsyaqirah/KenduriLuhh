@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { AgentMessage, Language, Mode } from '../types';
+import type { AgentMessage, CateringRequest, Language, Mode } from '../types';
 
 export type Status = 'idle' | 'loading' | 'running' | 'reconnecting' | 'done' | 'error';
 
@@ -13,6 +13,7 @@ interface ChatStore {
   typingAgent: string | null;
   doneAgents: string[];
   retryAttempt: number;
+  originalRequest: CateringRequest | null;   // stored for guest spike re-submit
 
   setMode: (mode: Mode) => void;
   setLanguage: (lang: Language) => void;
@@ -23,6 +24,7 @@ interface ChatStore {
   setTypingAgent: (agent: string | null) => void;
   markAgentDone: (agent: string) => void;
   setReconnecting: (attempt: number) => void;
+  setOriginalRequest: (req: CateringRequest) => void;
   reset: () => void;
 }
 
@@ -36,6 +38,7 @@ const initialState = {
   typingAgent: null,
   doneAgents: [],
   retryAttempt: 0,
+  originalRequest: null,
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -47,7 +50,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   addMessage: (msg) =>
     set((s) => ({
       messages: [...s.messages, msg],
-      // track which agents have spoken at least once
       doneAgents: s.doneAgents.includes(msg.agent)
         ? s.doneAgents
         : [...s.doneAgents, msg.agent],
@@ -60,5 +62,6 @@ export const useChatStore = create<ChatStore>((set) => ({
       doneAgents: s.doneAgents.includes(agent) ? s.doneAgents : [...s.doneAgents, agent],
     })),
   setReconnecting: (attempt) => set({ status: 'reconnecting', retryAttempt: attempt }),
+  setOriginalRequest: (originalRequest) => set({ originalRequest }),
   reset: () => set(initialState),
 }));

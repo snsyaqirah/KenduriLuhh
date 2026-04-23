@@ -1,10 +1,17 @@
 export type Mode = 'katering' | 'rewang';
 export type Language = 'ms' | 'en';
 
+export interface AuditEntry {
+  action: string;
+  key_outputs?: Record<string, string | number | string[] | boolean | null>;
+  status: 'SUCCESS' | 'APPROVED' | 'REJECTED' | 'ERROR';
+}
+
 export interface AgentMessage {
   agent: string;
   content: string;
   timestamp: string;
+  audit?: AuditEntry;
 }
 
 export interface SSEEvent {
@@ -14,6 +21,7 @@ export interface SSEEvent {
   timestamp?: string;
   total_messages?: number;
   message?: string;
+  audit?: AuditEntry;
 }
 
 export interface ChatStartResponse {
@@ -29,8 +37,8 @@ export interface CateringRequest {
   event_type: string;
   pax: number;
   budget_myr: number;
-  event_date: string;           // required — YYYY-MM-DD
-  event_location: string;       // required
+  event_date: string;           // YYYY-MM-DD
+  event_location: string;
   menu_preferences?: string[];
   dietary_notes?: string;
   special_requests?: string;

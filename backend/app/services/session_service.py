@@ -59,13 +59,16 @@ def set_running(session_id: str) -> None:
         _sessions[session_id]["status"] = "running"
 
 
-def add_message(session_id: str, agent_name: str, content: str) -> None:
+def add_message(session_id: str, agent_name: str, content: str, audit: dict | None = None) -> None:
     if session_id in _sessions:
-        _sessions[session_id]["messages"].append({
+        entry: dict = {
             "agent": agent_name,
             "content": content,
             "timestamp": datetime.utcnow().isoformat(),
-        })
+        }
+        if audit:
+            entry["audit"] = audit
+        _sessions[session_id]["messages"].append(entry)
 
 
 def set_done(session_id: str) -> None:

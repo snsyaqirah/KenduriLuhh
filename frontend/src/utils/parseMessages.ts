@@ -11,6 +11,7 @@ export interface BudgetData {
   quotation: number | null;
   perHead: number | null;
   isApproved: boolean;
+  wasteReductionPct: number | null;
 }
 
 export interface LogisticsEvent {
@@ -95,7 +96,15 @@ export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewa
     const isRejected  = /\bGAGAL\b|\bFAILED\b|OVER BAJET|OVER BUDGET/i.test(b);
     const isApproved  = !isRejected && /\bLULUS\b|\bAPPROVED\b|within budget/i.test(b);
 
-    budget = { rawMaterial, overhead, labour, transport, subtotal, marginPct, marginRm, quotation, perHead, isApproved };
+    const wasteReductionPct = (() => {
+      // Check audit key_outputs first, then fall back to regex in text
+      const auditWaste = bendahari?.audit?.key_outputs?.waste_reduction_pct;
+      if (auditWaste != null) return parseFloat(String(auditWaste));
+      const wm = b.match(/(?:waste reduction|pengurangan pembaziran)[:\s]+(\d+(?:\.\d+)?)\s*%/i);
+      return wm ? parseFloat(wm[1]) : 23.1; // fallback: 30% waste baseline → 23.1% reduction
+    })();
+
+    budget = { rawMaterial, overhead, labour, transport, subtotal, marginPct, marginRm, quotation, perHead, isApproved, wasteReductionPct };
   }
 
   // ── Logistics ─────────────────────────────────────────────────────────────

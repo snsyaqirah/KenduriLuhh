@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-04-22",
-  "source": "Pasar Borong Selayang & Pudu Raya, Kuala Lumpur",
+  "last_updated": "2026-04-23",
+  "source": "PriceCatcher data.gov.my — 2026-04",
   "ingredients": [
     {
       "id": "beras_basmati",
@@ -8,11 +8,13 @@
       "name_en": "Basmati Rice",
       "category": "carbohydrate",
       "unit": "kg",
-      "pasar_borong_price_myr": 4.20,
-      "retail_price_myr": 6.50,
-      "pasar_malam_price_myr": 5.00,
+      "pasar_borong_price_myr": 4.2,
+      "retail_price_myr": 6.5,
+      "pasar_malam_price_myr": 5.0,
       "halal_certified": true,
-      "substitutes": ["beras_wangi"],
+      "substitutes": [
+        "beras_wangi"
+      ],
       "shelf_life_days": 365,
       "rewang_measure": "1 gantang = 3.6kg",
       "notes": "Preferred for nasi minyak and briyani."
@@ -23,14 +25,82 @@
       "name_en": "Fragrant White Rice",
       "category": "carbohydrate",
       "unit": "kg",
-      "pasar_borong_price_myr": 3.80,
-      "retail_price_myr": 5.50,
-      "pasar_malam_price_myr": 4.50,
+      "pasar_borong_price_myr": 1.96,
+      "retail_price_myr": 2.61,
+      "pasar_malam_price_myr": 4.5,
       "halal_certified": true,
-      "substitutes": ["beras_basmati"],
+      "substitutes": [
+        "beras_basmati"
+      ],
       "shelf_life_days": 365,
       "rewang_measure": "1 gantang = 3.6kg",
-      "notes": "Everyday rice. Best value. Suitable for all events."
+      "notes": "Everyday rice. Best value. Suitable for all events.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 2.61,
+        "runcit_national_min": 2.59,
+        "runcit_national_max": 3.51,
+        "pasar_borong_est": 1.96,
+        "observations": 369,
+        "by_state": {
+          "Johor": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Kedah": {
+            "avg": 2.6,
+            "min": 2.59
+          },
+          "Kelantan": {
+            "avg": 2.6,
+            "min": 2.59
+          },
+          "Kuala Lumpur": {
+            "avg": 2.69,
+            "min": 2.6
+          },
+          "Melaka": {
+            "avg": 2.6,
+            "min": 2.59
+          },
+          "Negeri Sembilan": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Pahang": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Perak": {
+            "avg": 2.6,
+            "min": 2.59
+          },
+          "Perlis": {
+            "avg": 2.6,
+            "min": 2.59
+          },
+          "Pulau Pinang": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Putrajaya": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Sarawak": {
+            "avg": 3.1,
+            "min": 3.1
+          },
+          "Selangor": {
+            "avg": 2.6,
+            "min": 2.6
+          },
+          "Terengganu": {
+            "avg": 2.6,
+            "min": 2.59
+          }
+        }
+      }
     },
     {
       "id": "beras_pulut",
@@ -38,9 +108,9 @@
       "name_en": "Glutinous Rice",
       "category": "carbohydrate",
       "unit": "kg",
-      "pasar_borong_price_myr": 4.50,
-      "retail_price_myr": 6.00,
-      "pasar_malam_price_myr": 5.20,
+      "pasar_borong_price_myr": 4.5,
+      "retail_price_myr": 6.0,
+      "pasar_malam_price_myr": 5.2,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 365,
@@ -53,9 +123,9 @@
       "name_en": "Broiler Chicken",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 9.50,
-      "retail_price_myr": 12.00,
-      "pasar_malam_price_myr": 10.50,
+      "pasar_borong_price_myr": 9.5,
+      "retail_price_myr": 12.0,
+      "pasar_malam_price_myr": 10.5,
       "halal_certified": true,
       "halal_cert_note": "Check JAKIM cert from supplier",
       "substitutes": [],
@@ -69,11 +139,13 @@
       "name_en": "Free-Range Chicken",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 16.00,
-      "retail_price_myr": 20.00,
-      "pasar_malam_price_myr": 18.00,
+      "pasar_borong_price_myr": 16.0,
+      "retail_price_myr": 20.0,
+      "pasar_malam_price_myr": 18.0,
       "halal_certified": true,
-      "substitutes": ["ayam_broiler"],
+      "substitutes": [
+        "ayam_broiler"
+      ],
       "shelf_life_days": 2,
       "rewang_measure": "1 ekor (~1kg) untuk 4 orang",
       "notes": "⚠️ MAHAL. Premium flavour but significantly pricier. Only for high-budget events."
@@ -84,14 +156,67 @@
       "name_en": "Local Beef",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 33.00,
-      "retail_price_myr": 38.00,
-      "pasar_malam_price_myr": 36.00,
+      "pasar_borong_price_myr": 32.54,
+      "retail_price_myr": 43.38,
+      "pasar_malam_price_myr": 36.0,
       "halal_certified": true,
-      "substitutes": ["daging_lembu_import", "ayam_broiler"],
+      "substitutes": [
+        "daging_lembu_import",
+        "ayam_broiler"
+      ],
       "shelf_life_days": 3,
       "rewang_measure": "1 kg untuk 6-7 orang (rendang)",
-      "notes": "⚠️ MAHAL. Standard for rendang and gulai. Bulk order (>20kg) gets 5% discount at Pasar Borong."
+      "notes": "⚠️ MAHAL. Standard for rendang and gulai. Bulk order (>20kg) gets 5% discount at Pasar Borong.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 43.38,
+        "runcit_national_min": 20.5,
+        "runcit_national_max": 79.9,
+        "pasar_borong_est": 32.54,
+        "observations": 204,
+        "by_state": {
+          "Johor": {
+            "avg": 48.15,
+            "min": 20.99
+          },
+          "Kuala Lumpur": {
+            "avg": 44.75,
+            "min": 21.5
+          },
+          "Melaka": {
+            "avg": 32.99,
+            "min": 32.99
+          },
+          "Negeri Sembilan": {
+            "avg": 30.32,
+            "min": 28.99
+          },
+          "Perak": {
+            "avg": 42.91,
+            "min": 28.99
+          },
+          "Pulau Pinang": {
+            "avg": 28.44,
+            "min": 20.5
+          },
+          "Putrajaya": {
+            "avg": 45.24,
+            "min": 25.5
+          },
+          "Sabah": {
+            "avg": 39.17,
+            "min": 23.5
+          },
+          "Sarawak": {
+            "avg": 46.43,
+            "min": 23.9
+          },
+          "Selangor": {
+            "avg": 37.19,
+            "min": 27.99
+          }
+        }
+      }
     },
     {
       "id": "daging_lembu_import",
@@ -99,11 +224,13 @@
       "name_en": "Imported Beef",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 28.00,
-      "retail_price_myr": 33.00,
-      "pasar_malam_price_myr": 30.00,
+      "pasar_borong_price_myr": 28.0,
+      "retail_price_myr": 33.0,
+      "pasar_malam_price_myr": 30.0,
       "halal_certified": true,
-      "substitutes": ["daging_lembu"],
+      "substitutes": [
+        "daging_lembu"
+      ],
       "shelf_life_days": 3,
       "rewang_measure": "1 kg untuk 6-7 orang",
       "notes": "15% cheaper than local. Taste slightly different but acceptable for large volume cooking."
@@ -114,11 +241,13 @@
       "name_en": "Mutton/Goat",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 38.00,
-      "retail_price_myr": 45.00,
-      "pasar_malam_price_myr": 42.00,
+      "pasar_borong_price_myr": 38.0,
+      "retail_price_myr": 45.0,
+      "pasar_malam_price_myr": 42.0,
       "halal_certified": true,
-      "substitutes": ["daging_lembu"],
+      "substitutes": [
+        "daging_lembu"
+      ],
       "shelf_life_days": 3,
       "rewang_measure": "1 kg untuk 5-6 orang",
       "notes": "⚠️ MAHAL. Premium. Used for kambing golek, kari kambing, briyani. Only for premium events."
@@ -129,11 +258,13 @@
       "name_en": "Tiger Prawns (medium)",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 35.00,
-      "retail_price_myr": 42.00,
-      "pasar_malam_price_myr": 38.00,
+      "pasar_borong_price_myr": 35.0,
+      "retail_price_myr": 42.0,
+      "pasar_malam_price_myr": 38.0,
       "halal_certified": true,
-      "substitutes": ["udang_sederhana"],
+      "substitutes": [
+        "udang_sederhana"
+      ],
       "shelf_life_days": 1,
       "rewang_measure": "0.5 kg untuk 4 orang",
       "notes": "⚠️ MAHAL. Price fluctuates. Check day-of price. Keep frozen until use."
@@ -144,9 +275,9 @@
       "name_en": "Standard Prawns",
       "category": "protein",
       "unit": "kg",
-      "pasar_borong_price_myr": 18.00,
-      "retail_price_myr": 24.00,
-      "pasar_malam_price_myr": 20.00,
+      "pasar_borong_price_myr": 18.0,
+      "retail_price_myr": 24.0,
+      "pasar_malam_price_myr": 20.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 1,
@@ -159,22 +290,96 @@
       "name_en": "Fresh Coconut Milk",
       "category": "dairy_alternative",
       "unit": "liter",
-      "pasar_borong_price_myr": 6.00,
-      "retail_price_myr": 8.00,
-      "pasar_malam_price_myr": 7.00,
+      "pasar_borong_price_myr": 8.31,
+      "retail_price_myr": 11.08,
+      "pasar_malam_price_myr": 7.0,
       "halal_certified": true,
       "substitutes": [
         {
           "id": "santan_kotak_kara",
           "reason": "unavailable_or_budget",
           "ratio": "200ml Kara + 800ml air = 1 liter santan segar",
-          "price_per_equivalent_liter_myr": 4.20,
+          "price_per_equivalent_liter_myr": 4.2,
           "saving_percent": 30
         }
       ],
       "shelf_life_days": 1,
       "rewang_measure": "1 biji kelapa = ~300ml santan pekat",
-      "notes": "Best flavour but must use same day. Available at Pasar Borong from 3AM."
+      "notes": "Best flavour but must use same day. Available at Pasar Borong from 3AM.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 11.08,
+        "runcit_national_min": 4.5,
+        "runcit_national_max": 20.0,
+        "pasar_borong_est": 8.31,
+        "observations": 873,
+        "by_state": {
+          "Johor": {
+            "avg": 11.47,
+            "min": 6.5
+          },
+          "Kedah": {
+            "avg": 12.83,
+            "min": 7.9
+          },
+          "Kelantan": {
+            "avg": 13.64,
+            "min": 10.9
+          },
+          "Kuala Lumpur": {
+            "avg": 9.4,
+            "min": 5.4
+          },
+          "Labuan": {
+            "avg": 16.0,
+            "min": 16.0
+          },
+          "Melaka": {
+            "avg": 11.12,
+            "min": 9.99
+          },
+          "Negeri Sembilan": {
+            "avg": 12.5,
+            "min": 7.99
+          },
+          "Pahang": {
+            "avg": 10.54,
+            "min": 6.99
+          },
+          "Perak": {
+            "avg": 11.03,
+            "min": 6.9
+          },
+          "Perlis": {
+            "avg": 16.0,
+            "min": 16.0
+          },
+          "Pulau Pinang": {
+            "avg": 16.15,
+            "min": 8.9
+          },
+          "Putrajaya": {
+            "avg": 8.36,
+            "min": 5.9
+          },
+          "Sabah": {
+            "avg": 11.4,
+            "min": 10.0
+          },
+          "Sarawak": {
+            "avg": 10.0,
+            "min": 10.0
+          },
+          "Selangor": {
+            "avg": 8.12,
+            "min": 4.5
+          },
+          "Terengganu": {
+            "avg": 15.43,
+            "min": 12.0
+          }
+        }
+      }
     },
     {
       "id": "santan_kotak_kara",
@@ -182,9 +387,9 @@
       "name_en": "Kara Coconut Cream (carton)",
       "category": "dairy_alternative",
       "unit": "kotak",
-      "pasar_borong_price_myr": 2.50,
-      "retail_price_myr": 3.20,
-      "pasar_malam_price_myr": 2.80,
+      "pasar_borong_price_myr": 2.5,
+      "retail_price_myr": 3.2,
+      "pasar_malam_price_myr": 2.8,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 365,
@@ -197,14 +402,88 @@
       "name_en": "Red Onion (Indian variety)",
       "category": "aromatics",
       "unit": "kg",
-      "pasar_borong_price_myr": 5.00,
-      "retail_price_myr": 7.00,
-      "pasar_malam_price_myr": 6.00,
+      "pasar_borong_price_myr": 5.39,
+      "retail_price_myr": 7.18,
+      "pasar_malam_price_myr": 6.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 14,
       "rewang_measure": "1 kg untuk masak 3-4 lauk besar",
-      "notes": "Essential aromatics. Always buy extra. Indian variety is sweeter and preferred."
+      "notes": "Essential aromatics. Always buy extra. Indian variety is sweeter and preferred.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 7.18,
+        "runcit_national_min": 0.6,
+        "runcit_national_max": 22.0,
+        "pasar_borong_est": 5.39,
+        "observations": 14947,
+        "by_state": {
+          "Johor": {
+            "avg": 6.48,
+            "min": 1.89
+          },
+          "Kedah": {
+            "avg": 7.47,
+            "min": 1.99
+          },
+          "Kelantan": {
+            "avg": 5.74,
+            "min": 1.99
+          },
+          "Kuala Lumpur": {
+            "avg": 7.51,
+            "min": 1.99
+          },
+          "Labuan": {
+            "avg": 8.78,
+            "min": 5.5
+          },
+          "Melaka": {
+            "avg": 5.74,
+            "min": 2.9
+          },
+          "Negeri Sembilan": {
+            "avg": 6.34,
+            "min": 1.59
+          },
+          "Pahang": {
+            "avg": 6.41,
+            "min": 1.99
+          },
+          "Perak": {
+            "avg": 6.6,
+            "min": 1.99
+          },
+          "Perlis": {
+            "avg": 8.54,
+            "min": 2.58
+          },
+          "Pulau Pinang": {
+            "avg": 7.2,
+            "min": 1.99
+          },
+          "Putrajaya": {
+            "avg": 8.63,
+            "min": 2.49
+          },
+          "Sabah": {
+            "avg": 9.04,
+            "min": 2.9
+          },
+          "Sarawak": {
+            "avg": 7.27,
+            "min": 0.6
+          },
+          "Selangor": {
+            "avg": 6.82,
+            "min": 1.99
+          },
+          "Terengganu": {
+            "avg": 7.54,
+            "min": 2.9
+          }
+        }
+      }
     },
     {
       "id": "bawang_putih",
@@ -212,14 +491,88 @@
       "name_en": "Garlic",
       "category": "aromatics",
       "unit": "kg",
-      "pasar_borong_price_myr": 8.00,
-      "retail_price_myr": 11.00,
-      "pasar_malam_price_myr": 9.00,
+      "pasar_borong_price_myr": 6.83,
+      "retail_price_myr": 9.1,
+      "pasar_malam_price_myr": 9.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 30,
       "rewang_measure": "1 ulas untuk setiap 200g daging",
-      "notes": "Use sparingly — strong flavour. Usually bought per kg for large events."
+      "notes": "Use sparingly — strong flavour. Usually bought per kg for large events.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 9.1,
+        "runcit_national_min": 0.5,
+        "runcit_national_max": 20.0,
+        "pasar_borong_est": 6.83,
+        "observations": 24837,
+        "by_state": {
+          "Johor": {
+            "avg": 9.01,
+            "min": 4.69
+          },
+          "Kedah": {
+            "avg": 9.05,
+            "min": 5.59
+          },
+          "Kelantan": {
+            "avg": 8.52,
+            "min": 4.69
+          },
+          "Kuala Lumpur": {
+            "avg": 10.02,
+            "min": 5.29
+          },
+          "Labuan": {
+            "avg": 7.9,
+            "min": 5.5
+          },
+          "Melaka": {
+            "avg": 9.66,
+            "min": 5.29
+          },
+          "Negeri Sembilan": {
+            "avg": 9.25,
+            "min": 0.95
+          },
+          "Pahang": {
+            "avg": 9.27,
+            "min": 4.69
+          },
+          "Perak": {
+            "avg": 9.27,
+            "min": 4.69
+          },
+          "Perlis": {
+            "avg": 9.89,
+            "min": 5.1
+          },
+          "Pulau Pinang": {
+            "avg": 9.54,
+            "min": 2.99
+          },
+          "Putrajaya": {
+            "avg": 9.91,
+            "min": 5.8
+          },
+          "Sabah": {
+            "avg": 8.56,
+            "min": 0.69
+          },
+          "Sarawak": {
+            "avg": 8.23,
+            "min": 3.6
+          },
+          "Selangor": {
+            "avg": 9.0,
+            "min": 0.5
+          },
+          "Terengganu": {
+            "avg": 9.46,
+            "min": 4.69
+          }
+        }
+      }
     },
     {
       "id": "cili_kering",
@@ -227,14 +580,90 @@
       "name_en": "Dried Chilli",
       "category": "spice",
       "unit": "kg",
-      "pasar_borong_price_myr": 18.00,
-      "retail_price_myr": 25.00,
-      "pasar_malam_price_myr": 20.00,
+      "pasar_borong_price_myr": 15.41,
+      "retail_price_myr": 20.55,
+      "pasar_malam_price_myr": 20.0,
       "halal_certified": true,
-      "substitutes": ["cili_kisar_botol"],
+      "substitutes": [
+        "cili_kisar_botol"
+      ],
       "shelf_life_days": 180,
       "rewang_measure": "10 batang cili untuk 1 kg rendang",
-      "notes": "⚠️ MAHAL per kg but used in small quantities. Soak in hot water before blending."
+      "notes": "⚠️ MAHAL per kg but used in small quantities. Soak in hot water before blending.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 20.55,
+        "runcit_national_min": 11.0,
+        "runcit_national_max": 48.0,
+        "pasar_borong_est": 15.41,
+        "observations": 4939,
+        "by_state": {
+          "Johor": {
+            "avg": 20.89,
+            "min": 11.99
+          },
+          "Kedah": {
+            "avg": 18.85,
+            "min": 12.9
+          },
+          "Kelantan": {
+            "avg": 20.71,
+            "min": 11.0
+          },
+          "Kuala Lumpur": {
+            "avg": 21.17,
+            "min": 13.8
+          },
+          "Labuan": {
+            "avg": 24.65,
+            "min": 19.0
+          },
+          "Melaka": {
+            "avg": 20.89,
+            "min": 12.8
+          },
+          "Negeri Sembilan": {
+            "avg": 20.27,
+            "min": 13.79
+          },
+          "Pahang": {
+            "avg": 19.32,
+            "min": 12.2
+          },
+          "Perak": {
+            "avg": 21.16,
+            "min": 12.99
+          },
+          "Perlis": {
+            "avg": 18.03,
+            "min": 14.9
+          },
+          "Pulau Pinang": {
+            "avg": 20.13,
+            "min": 13.05
+          },
+          "Putrajaya": {
+            "avg": 23.55,
+            "min": 13.99
+          },
+          "Sabah": {
+            "avg": 20.18,
+            "min": 12.8
+          },
+          "Sarawak": {
+            "avg": 21.14,
+            "min": 12.9
+          },
+          "Selangor": {
+            "avg": 20.0,
+            "min": 12.99
+          },
+          "Terengganu": {
+            "avg": 21.29,
+            "min": 13.99
+          }
+        }
+      }
     },
     {
       "id": "serai",
@@ -242,9 +671,9 @@
       "name_en": "Lemongrass",
       "category": "aromatics",
       "unit": "kg",
-      "pasar_borong_price_myr": 3.00,
-      "retail_price_myr": 4.50,
-      "pasar_malam_price_myr": 3.50,
+      "pasar_borong_price_myr": 3.0,
+      "retail_price_myr": 4.5,
+      "pasar_malam_price_myr": 3.5,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 7,
@@ -257,14 +686,88 @@
       "name_en": "Galangal",
       "category": "aromatics",
       "unit": "kg",
-      "pasar_borong_price_myr": 4.00,
-      "retail_price_myr": 6.00,
-      "pasar_malam_price_myr": 5.00,
+      "pasar_borong_price_myr": 7.78,
+      "retail_price_myr": 10.37,
+      "pasar_malam_price_myr": 5.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 14,
       "rewang_measure": "2 inci untuk setiap kg daging",
-      "notes": "Distinct ginger-like flavour. Cannot substitute in rendang."
+      "notes": "Distinct ginger-like flavour. Cannot substitute in rendang.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 10.37,
+        "runcit_national_min": 0.89,
+        "runcit_national_max": 24.0,
+        "pasar_borong_est": 7.78,
+        "observations": 21853,
+        "by_state": {
+          "Johor": {
+            "avg": 9.5,
+            "min": 0.89
+          },
+          "Kedah": {
+            "avg": 9.67,
+            "min": 6.89
+          },
+          "Kelantan": {
+            "avg": 10.61,
+            "min": 6.5
+          },
+          "Kuala Lumpur": {
+            "avg": 11.76,
+            "min": 5.89
+          },
+          "Labuan": {
+            "avg": 10.97,
+            "min": 8.99
+          },
+          "Melaka": {
+            "avg": 10.26,
+            "min": 5.99
+          },
+          "Negeri Sembilan": {
+            "avg": 9.68,
+            "min": 4.9
+          },
+          "Pahang": {
+            "avg": 10.01,
+            "min": 5.59
+          },
+          "Perak": {
+            "avg": 11.24,
+            "min": 4.99
+          },
+          "Perlis": {
+            "avg": 11.32,
+            "min": 6.5
+          },
+          "Pulau Pinang": {
+            "avg": 10.48,
+            "min": 3.99
+          },
+          "Putrajaya": {
+            "avg": 11.66,
+            "min": 7.9
+          },
+          "Sabah": {
+            "avg": 9.94,
+            "min": 5.0
+          },
+          "Sarawak": {
+            "avg": 9.17,
+            "min": 1.99
+          },
+          "Selangor": {
+            "avg": 10.06,
+            "min": 2.79
+          },
+          "Terengganu": {
+            "avg": 10.72,
+            "min": 5.99
+          }
+        }
+      }
     },
     {
       "id": "kunyit_hidup",
@@ -272,14 +775,90 @@
       "name_en": "Fresh Turmeric",
       "category": "spice",
       "unit": "kg",
-      "pasar_borong_price_myr": 6.00,
-      "retail_price_myr": 9.00,
-      "pasar_malam_price_myr": 7.00,
+      "pasar_borong_price_myr": 7.37,
+      "retail_price_myr": 9.82,
+      "pasar_malam_price_myr": 7.0,
       "halal_certified": true,
-      "substitutes": ["serbuk_kunyit"],
+      "substitutes": [
+        "serbuk_kunyit"
+      ],
       "shelf_life_days": 14,
       "rewang_measure": "1 inci untuk setiap kg ayam (marinate)",
-      "notes": "Stains everything yellow. Use gloves. Dried powder can substitute at 1 tsp = 1 inch fresh."
+      "notes": "Stains everything yellow. Use gloves. Dried powder can substitute at 1 tsp = 1 inch fresh.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 9.82,
+        "runcit_national_min": 0.07,
+        "runcit_national_max": 79.0,
+        "pasar_borong_est": 7.37,
+        "observations": 22497,
+        "by_state": {
+          "Johor": {
+            "avg": 8.81,
+            "min": 4.99
+          },
+          "Kedah": {
+            "avg": 10.07,
+            "min": 1.0
+          },
+          "Kelantan": {
+            "avg": 8.62,
+            "min": 5.89
+          },
+          "Kuala Lumpur": {
+            "avg": 9.83,
+            "min": 3.99
+          },
+          "Labuan": {
+            "avg": 15.19,
+            "min": 10.0
+          },
+          "Melaka": {
+            "avg": 9.79,
+            "min": 4.99
+          },
+          "Negeri Sembilan": {
+            "avg": 8.49,
+            "min": 0.07
+          },
+          "Pahang": {
+            "avg": 9.14,
+            "min": 5.99
+          },
+          "Perak": {
+            "avg": 9.52,
+            "min": 4.99
+          },
+          "Perlis": {
+            "avg": 11.5,
+            "min": 5.9
+          },
+          "Pulau Pinang": {
+            "avg": 10.21,
+            "min": 2.49
+          },
+          "Putrajaya": {
+            "avg": 10.64,
+            "min": 1.89
+          },
+          "Sabah": {
+            "avg": 14.2,
+            "min": 4.99
+          },
+          "Sarawak": {
+            "avg": 10.99,
+            "min": 4.2
+          },
+          "Selangor": {
+            "avg": 8.71,
+            "min": 4.99
+          },
+          "Terengganu": {
+            "avg": 9.04,
+            "min": 4.99
+          }
+        }
+      }
     },
     {
       "id": "kerisik",
@@ -287,9 +866,9 @@
       "name_en": "Toasted Grated Coconut",
       "category": "condiment",
       "unit": "kg",
-      "pasar_borong_price_myr": 15.00,
-      "retail_price_myr": 20.00,
-      "pasar_malam_price_myr": 17.00,
+      "pasar_borong_price_myr": 15.0,
+      "retail_price_myr": 20.0,
+      "pasar_malam_price_myr": 17.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 7,
@@ -302,11 +881,13 @@
       "name_en": "Palm Sugar",
       "category": "sweetener",
       "unit": "kg",
-      "pasar_borong_price_myr": 12.00,
-      "retail_price_myr": 16.00,
-      "pasar_malam_price_myr": 14.00,
+      "pasar_borong_price_myr": 12.0,
+      "retail_price_myr": 16.0,
+      "pasar_malam_price_myr": 14.0,
       "halal_certified": true,
-      "substitutes": ["gula_pasir"],
+      "substitutes": [
+        "gula_pasir"
+      ],
       "shelf_life_days": 90,
       "rewang_measure": "1 biji bulat (~200g) untuk wajik 10 orang",
       "notes": "Rich caramel flavour. Used in wajik, kuih, and some curries. Brown sugar can substitute."
@@ -317,14 +898,88 @@
       "name_en": "Palm Cooking Oil (5kg)",
       "category": "oil",
       "unit": "tin",
-      "pasar_borong_price_myr": 28.00,
-      "retail_price_myr": 35.00,
-      "pasar_malam_price_myr": 30.00,
+      "pasar_borong_price_myr": 4.5,
+      "retail_price_myr": 6.0,
+      "pasar_malam_price_myr": 30.0,
       "halal_certified": true,
       "substitutes": [],
       "shelf_life_days": 365,
       "rewang_measure": "1 tin 5kg untuk 50-80 orang (all lauk)",
-      "notes": "Subsidised product in Malaysia. Price is regulated. Buy Pasar Borong for bulk discount."
+      "notes": "Subsidised product in Malaysia. Price is regulated. Buy Pasar Borong for bulk discount.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 6.0,
+        "runcit_national_min": 2.45,
+        "runcit_national_max": 29.9,
+        "pasar_borong_est": 4.5,
+        "observations": 7928,
+        "by_state": {
+          "Johor": {
+            "avg": 6.13,
+            "min": 2.5
+          },
+          "Kedah": {
+            "avg": 5.56,
+            "min": 2.5
+          },
+          "Kelantan": {
+            "avg": 4.28,
+            "min": 2.5
+          },
+          "Kuala Lumpur": {
+            "avg": 6.32,
+            "min": 2.5
+          },
+          "Labuan": {
+            "avg": 5.49,
+            "min": 2.5
+          },
+          "Melaka": {
+            "avg": 5.33,
+            "min": 2.5
+          },
+          "Negeri Sembilan": {
+            "avg": 6.05,
+            "min": 2.5
+          },
+          "Pahang": {
+            "avg": 5.79,
+            "min": 2.5
+          },
+          "Perak": {
+            "avg": 6.32,
+            "min": 2.5
+          },
+          "Perlis": {
+            "avg": 4.88,
+            "min": 2.5
+          },
+          "Pulau Pinang": {
+            "avg": 6.26,
+            "min": 2.45
+          },
+          "Putrajaya": {
+            "avg": 6.81,
+            "min": 2.5
+          },
+          "Sabah": {
+            "avg": 6.84,
+            "min": 2.5
+          },
+          "Sarawak": {
+            "avg": 6.87,
+            "min": 2.5
+          },
+          "Selangor": {
+            "avg": 6.09,
+            "min": 2.5
+          },
+          "Terengganu": {
+            "avg": 4.95,
+            "min": 2.5
+          }
+        }
+      }
     },
     {
       "id": "gula_pasir",
@@ -332,14 +987,90 @@
       "name_en": "White Sugar",
       "category": "sweetener",
       "unit": "kg",
-      "pasar_borong_price_myr": 2.85,
-      "retail_price_myr": 3.50,
-      "pasar_malam_price_myr": 3.00,
+      "pasar_borong_price_myr": 2.15,
+      "retail_price_myr": 2.87,
+      "pasar_malam_price_myr": 3.0,
       "halal_certified": true,
-      "substitutes": ["gula_melaka"],
+      "substitutes": [
+        "gula_melaka"
+      ],
       "shelf_life_days": 730,
       "rewang_measure": "1 kg untuk masak semua kuih 30 orang",
-      "notes": "Price-controlled item. Stable price nationwide."
+      "notes": "Price-controlled item. Stable price nationwide.",
+      "price_data_live": {
+        "source": "PriceCatcher 2026-04",
+        "runcit_national_avg": 2.87,
+        "runcit_national_min": 0.85,
+        "runcit_national_max": 4.9,
+        "pasar_borong_est": 2.15,
+        "observations": 7021,
+        "by_state": {
+          "Johor": {
+            "avg": 2.87,
+            "min": 2.58
+          },
+          "Kedah": {
+            "avg": 2.86,
+            "min": 2.8
+          },
+          "Kelantan": {
+            "avg": 2.86,
+            "min": 2.85
+          },
+          "Kuala Lumpur": {
+            "avg": 2.89,
+            "min": 2.8
+          },
+          "Labuan": {
+            "avg": 2.85,
+            "min": 2.85
+          },
+          "Melaka": {
+            "avg": 2.87,
+            "min": 2.84
+          },
+          "Negeri Sembilan": {
+            "avg": 2.88,
+            "min": 2.79
+          },
+          "Pahang": {
+            "avg": 2.88,
+            "min": 2.85
+          },
+          "Perak": {
+            "avg": 2.88,
+            "min": 2.85
+          },
+          "Perlis": {
+            "avg": 2.86,
+            "min": 2.79
+          },
+          "Pulau Pinang": {
+            "avg": 2.88,
+            "min": 2.84
+          },
+          "Putrajaya": {
+            "avg": 2.88,
+            "min": 2.84
+          },
+          "Sabah": {
+            "avg": 2.86,
+            "min": 2.85
+          },
+          "Sarawak": {
+            "avg": 2.86,
+            "min": 0.85
+          },
+          "Selangor": {
+            "avg": 2.89,
+            "min": 2.84
+          },
+          "Terengganu": {
+            "avg": 2.86,
+            "min": 2.79
+          }
+        }
+      }
     }
   ]
 }

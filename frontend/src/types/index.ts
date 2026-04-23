@@ -30,6 +30,28 @@ export interface ChatStartResponse {
   message: string;
 }
 
+export interface HistorySession {
+  id: string;
+  savedAt: string;
+  mode: Mode;
+  language: Language;
+  request: {
+    pax: number;
+    budget_myr: number;
+    event_type: string;
+    event_location: string;
+    event_date: string;
+  };
+  result: {
+    quotation: number | null;
+    totalCost: number | null;
+    isApproved: boolean;
+    menuItems: string[];
+    wasteReductionPct: number | null;
+  };
+  messages: AgentMessage[];
+}
+
 // Must exactly match backend CateringRequest model
 export interface CateringRequest {
   mode: Mode;

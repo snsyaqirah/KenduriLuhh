@@ -1,6 +1,7 @@
 import { useCallback, useRef } from 'react';
 import { useChatStore } from '../store/chatStore';
-import type { CateringRequest, SSEEvent } from '../types';
+import type { AgentMessage, CateringRequest, SSEEvent } from '../types';
+import { saveSession } from './useHistory';
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 2000;
@@ -53,6 +54,23 @@ export function useAgentChat() {
         useChatStore.getState().setStatus('done');
         useChatStore.getState().setTypingAgent(null);
         es.close();
+        // Auto-save to history
+        const state = useChatStore.getState();
+        if (state.sessionId && state.originalRequest) {
+          saveSession({
+            sessionId: state.sessionId,
+            mode: state.mode,
+            language: state.language,
+            request: {
+              pax: state.originalRequest.pax,
+              budget_myr: state.originalRequest.budget_myr,
+              event_type: state.originalRequest.event_type,
+              event_location: state.originalRequest.event_location,
+              event_date: state.originalRequest.event_date,
+            },
+            messages: state.messages,
+          });
+        }
       }
 
       if (event.type === 'error') {
@@ -139,5 +157,12 @@ export function useAgentChat() {
     store.reset();
   }, [store]);
 
-  return { ...store, startChat, stopChat };
+  /** Load a past session's messages for read-only replay viewing */
+  const replaySession = useCallback((messages: AgentMessage[]) => {
+    store.reset();
+    messages.forEach((m) => store.addMessage(m));
+    store.setStatus('done');
+  }, [store]);
+
+  return { ...store, startChat, stopChat, replaySession };
 }

@@ -1,13 +1,16 @@
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChatInput } from './components/ChatInput';
 import { AgentChatFeed } from './components/AgentChatFeed';
 import { AgentStatusBar } from './components/AgentStatusBar';
 import { OutputPanel } from './components/outputs/OutputPanel';
+import { HistoryDrawer } from './components/HistoryDrawer';
 import { useAgentChat } from './hooks/useAgentChat';
 import { stripMd } from './utils/parseMessages';
 
 export default function App() {
-  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, startChat, stopChat } = useAgentChat();
+  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, startChat, stopChat, replaySession } = useAgentChat();
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   const isActive = status === 'loading' || status === 'running' || status === 'reconnecting';
   const showFeed = messages.length > 0 || isActive;
@@ -51,6 +54,15 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
+            {/* History button */}
+            <button
+              onClick={() => setHistoryOpen(true)}
+              title={language === 'en' ? 'Session history' : 'Sejarah sesi'}
+              className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-stone-800 border border-stone-200 hover:border-stone-400 bg-white rounded-lg px-3 py-1.5 transition-all cursor-pointer"
+            >
+              <span>🕐</span>
+              <span className="hidden sm:inline">{language === 'en' ? 'History' : 'Sejarah'}</span>
+            </button>
             {status === 'reconnecting' && (
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
@@ -213,6 +225,14 @@ export default function App() {
       <footer className="border-t border-stone-200 bg-white text-center py-4 text-xs text-stone-400">
         KenduriLuhh · iNextLabs Hackathon 2026 · Powered by Azure OpenAI & AutoGen
       </footer>
+
+      {/* ── History drawer ── */}
+      <HistoryDrawer
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+        onReplay={replaySession}
+        language={language}
+      />
     </div>
   );
 }

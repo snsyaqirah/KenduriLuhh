@@ -17,6 +17,7 @@ from app.models.request_models import CateringRequest
 from app.models.response_models import ChatStartResponse, ChatResultResponse, AgentMessage
 from app.services import session_service
 from app.services.knowledge_service import build_task_string
+from app.services.rag_service import get_rag_context_for_request
 from app.services.weather_service import get_event_weather
 from app.agents.group_chat import create_team, run_team_stream
 from app.config import settings
@@ -171,6 +172,9 @@ async def stream_chat(session_id: str):
             )
             team = create_team(mode=session["mode"], language=language, weather_data=weather_data)
             task_text = build_task_string(request_data)
+            rag_context = get_rag_context_for_request(request_data)
+            if rag_context:
+                task_text = task_text + "\n\n" + rag_context
 
             async for agent_name, content in run_team_stream(team, task_text):
                 if agent_name == "__DONE__":

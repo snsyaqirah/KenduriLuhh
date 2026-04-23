@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChefHat, Calculator, ShoppingBasket, Truck, Crown } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
@@ -75,10 +75,31 @@ function getVerdictStyle(agent: string, content: string): { bg: string; badge: s
   return { bg: 'bg-white', badge: null };
 }
 
+const MD_COMPONENTS = {
+  p: ({ children }: { children?: React.ReactNode }) => <p className="mb-1.5 last:mb-0 leading-relaxed">{children}</p>,
+  strong: ({ children }: { children?: React.ReactNode }) => <strong className="font-semibold text-stone-800">{children}</strong>,
+  h1: ({ children }: { children?: React.ReactNode }) => <h1 className="text-base font-bold text-stone-800 mt-3 mb-1">{children}</h1>,
+  h2: ({ children }: { children?: React.ReactNode }) => <h2 className="text-sm font-bold text-stone-800 mt-2.5 mb-1">{children}</h2>,
+  h3: ({ children }: { children?: React.ReactNode }) => <h3 className="text-sm font-semibold text-stone-700 mt-2 mb-0.5">{children}</h3>,
+  ul: ({ children }: { children?: React.ReactNode }) => <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>,
+  ol: ({ children }: { children?: React.ReactNode }) => <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>,
+  li: ({ children }: { children?: React.ReactNode }) => <li className="text-sm text-stone-700">{children}</li>,
+  hr: () => <hr className="border-stone-200 my-2" />,
+  code: ({ children }: { children?: React.ReactNode }) => <code className="bg-stone-100 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
+  blockquote: ({ children }: { children?: React.ReactNode }) => <blockquote className="border-l-2 border-stone-300 pl-3 italic text-stone-500 my-1">{children}</blockquote>,
+};
+
 function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
   const meta = AGENT_META[msg.agent] ?? DEFAULT_META;
   const { Icon } = meta;
   const verdict = getVerdictStyle(msg.agent, msg.content);
+  const [ragOpen, setRagOpen] = useState(false);
+
+  // Split RAG block out of message content
+  const ragMarker = '📚';
+  const ragIdx = msg.content.indexOf(ragMarker);
+  const mainContent = ragIdx > 0 ? msg.content.slice(0, ragIdx).trim() : msg.content;
+  const ragContent  = ragIdx > 0 ? msg.content.slice(ragIdx).trim() : null;
 
   return (
     <motion.div
@@ -112,26 +133,42 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
             </span>
           )}
         </div>
+
+        {/* Main content */}
         <div className="prose prose-sm prose-stone max-w-none text-stone-700">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-              p: ({ children }) => <p className="mb-1.5 last:mb-0 leading-relaxed">{children}</p>,
-              strong: ({ children }) => <strong className="font-semibold text-stone-800">{children}</strong>,
-              h1: ({ children }) => <h1 className="text-base font-bold text-stone-800 mt-3 mb-1">{children}</h1>,
-              h2: ({ children }) => <h2 className="text-sm font-bold text-stone-800 mt-2.5 mb-1">{children}</h2>,
-              h3: ({ children }) => <h3 className="text-sm font-semibold text-stone-700 mt-2 mb-0.5">{children}</h3>,
-              ul: ({ children }) => <ul className="list-disc list-inside space-y-0.5 my-1">{children}</ul>,
-              ol: ({ children }) => <ol className="list-decimal list-inside space-y-0.5 my-1">{children}</ol>,
-              li: ({ children }) => <li className="text-sm text-stone-700">{children}</li>,
-              hr: () => <hr className="border-stone-200 my-2" />,
-              code: ({ children }) => <code className="bg-stone-100 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
-              blockquote: ({ children }) => <blockquote className="border-l-2 border-stone-300 pl-3 italic text-stone-500 my-1">{children}</blockquote>,
-            }}
-          >
-            {msg.content}
+          <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD_COMPONENTS}>
+            {mainContent}
           </ReactMarkdown>
         </div>
+
+        {/* RAG context — collapsed by default */}
+        {ragContent && (
+          <div className="mt-1">
+            <button
+              onClick={() => setRagOpen((v) => !v)}
+              className="flex items-center gap-1.5 text-xs text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
+            >
+              <span>{ragOpen ? '▲' : '▼'}</span>
+              <span className="font-mono">📚 KB Context</span>
+            </button>
+            <AnimatePresence initial={false}>
+              {ragOpen && (
+                <motion.div
+                  key="rag"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-1.5 rounded-lg bg-stone-50 border border-stone-200 px-3 py-2 text-xs text-stone-500 font-mono whitespace-pre-wrap leading-relaxed max-h-48 overflow-y-auto">
+                    {ragContent}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
     </motion.div>
   );

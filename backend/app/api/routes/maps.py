@@ -84,52 +84,96 @@ async def geocode(query: str = Query(..., min_length=2)):
     }
 
 
+WEATHER_CODE_MAP = {
+    0: ("☀️", "Cerah", "Clear sky"),
+    1: ("🌤️", "Cerah sebahagian", "Mainly clear"),
+    2: ("⛅", "Berawan", "Partly cloudy"),
+    3: ("☁️", "Mendung", "Overcast"),
+    45: ("🌫️", "Kabus", "Foggy"),
+    48: ("🌫️", "Kabus ais", "Icy fog"),
+    51: ("🌦️", "Renyai ringan", "Light drizzle"),
+    53: ("🌦️", "Renyai", "Drizzle"),
+    55: ("🌦️", "Renyai lebat", "Heavy drizzle"),
+    61: ("🌧️", "Hujan ringan", "Light rain"),
+    63: ("🌧️", "Hujan", "Rain"),
+    65: ("🌧️", "Hujan lebat", "Heavy rain"),
+    80: ("🌧️", "Hujan renyai", "Rain showers"),
+    81: ("🌧️", "Hujan lebat", "Heavy showers"),
+    82: ("⛈️", "Hujan ribut", "Violent showers"),
+    95: ("⛈️", "Ribut petir", "Thunderstorm"),
+    96: ("⛈️", "Ribut dengan hujan batu", "Thunderstorm + hail"),
+    99: ("⛈️", "Ribut teruk", "Severe thunderstorm"),
+}
+
+
+async def _get_weather(lat: float, lng: float) -> dict | None:
+    """Fetch current weather from Open-Meteo (no API key needed)."""
+    try:
+        url = (
+            f"https://api.open-meteo.com/v1/forecast"
+            f"?latitude={lat}&longitude={lng}"
+            f"&current=temperature_2m,precipitation,weathercode,windspeed_10m"
+            f"&timezone=Asia%2FKuala_Lumpur"
+        )
+        async with httpx.AsyncClient(timeout=8) as client:
+            resp = await client.get(url)
+        if resp.status_code != 200:
+            return None
+        data = resp.json().get("current", {})
+        code = data.get("weathercode", 0)
+        desc = WEATHER_CODE_MAP.get(code, WEATHER_CODE_MAP.get(0))
+        return {
+            "icon": desc[0],
+            "label_ms": desc[1],
+            "label_en": desc[2],
+            "temperature_c": round(data.get("temperature_2m", 0), 1),
+            "precipitation_mm": round(data.get("precipitation", 0), 1),
+            "windspeed_kmh": round(data.get("windspeed_10m", 0), 1),
+            "code": code,
+        }
+    except Exception:
+        return None
+
+
 @router.get("/route")
 async def get_route(
     destination: str = Query(..., description="Event location string (city/address)"),
-    origin: str = Query("Pasar Borong Selayang, Selangor", description="Supply origin"),
 ):
     """
-    Calculate driving route from supply origin to event destination.
-    Returns: distance_km, duration_min, summary, and nearest pasar borong.
+    Calculate driving route from nearest Pasar Borong to event destination.
+    Origin is always the hardcoded nearest Pasar Borong — no geocoding ambiguity.
+    Also returns current weather at the destination via Open-Meteo.
     """
     if not settings.AZURE_MAPS_KEY:
         raise HTTPException(status_code=503, detail="Azure Maps key not configured")
 
-    # Geocode both endpoints
+    # Geocode destination only
     async with httpx.AsyncClient(timeout=15) as client:
         geocode_url = f"{AZURE_MAPS_BASE}/search/address/json"
-        common_params = {
+        dest_resp = await client.get(geocode_url, params={
             "api-version": "1.0",
             "subscription-key": settings.AZURE_MAPS_KEY,
             "countrySet": "MY",
             "limit": 1,
-        }
+            "query": destination + ", Malaysia",
+        })
 
-        origin_resp = await client.get(geocode_url, params={**common_params, "query": origin})
-        dest_resp   = await client.get(geocode_url, params={**common_params, "query": destination + ", Malaysia"})
+    if dest_resp.status_code != 200:
+        raise HTTPException(status_code=502, detail="Geocoding failed")
 
-        if origin_resp.status_code != 200 or dest_resp.status_code != 200:
-            raise HTTPException(status_code=502, detail="Geocoding failed")
+    dest_results = dest_resp.json().get("results", [])
+    if not dest_results:
+        raise HTTPException(status_code=404, detail=f"Location not found: {destination}")
 
-        origin_data = origin_resp.json()
-        dest_data   = dest_resp.json()
-
-    origin_results = origin_data.get("results", [])
-    dest_results   = dest_data.get("results", [])
-
-    if not origin_results or not dest_results:
-        raise HTTPException(status_code=404, detail="Could not geocode one or both locations")
-
-    o_pos = origin_results[0]["position"]
     d_pos = dest_results[0]["position"]
-    o_addr = origin_results[0].get("address", {}).get("freeformAddress", origin)
     d_addr = dest_results[0].get("address", {}).get("freeformAddress", destination)
 
-    # Find nearest Pasar Borong to destination
+    # Find nearest Pasar Borong using hardcoded coordinates (no geocoding ambiguity)
     nearest_pb = _nearest_pasar(d_pos["lat"], d_pos["lon"])
+    o_pos = {"lat": nearest_pb["lat"], "lon": nearest_pb["lng"]}
+    o_addr = nearest_pb["name"]
 
-    # Routing call
+    # Routing + weather in parallel
     route_url = (
         f"{AZURE_MAPS_BASE}/route/directions/json"
         f"?api-version=1.0"
@@ -140,18 +184,19 @@ async def get_route(
         f"&traffic=true"
     )
 
-    async with httpx.AsyncClient(timeout=15) as client:
-        route_resp = await client.get(route_url)
+    import asyncio
+    route_task   = asyncio.create_task(_fetch_route(route_url))
+    weather_task = asyncio.create_task(_get_weather(d_pos["lat"], d_pos["lon"]))
+    route_resp_data, weather = await asyncio.gather(route_task, weather_task)
 
-    if route_resp.status_code != 200:
+    if route_resp_data is None:
         raise HTTPException(status_code=502, detail="Azure Maps routing failed")
 
-    route_data = route_resp.json()
-    routes = route_data.get("routes", [])
+    routes = route_resp_data.get("routes", [])
     if not routes:
         raise HTTPException(status_code=404, detail="No route found")
 
-    summary = routes[0]["summary"]
+    summary   = routes[0]["summary"]
     distance_m = summary["lengthInMeters"]
     duration_s = summary["travelTimeInSeconds"]
     traffic_s  = summary.get("trafficDelayInSeconds", 0)
@@ -174,7 +219,15 @@ async def get_route(
             "traffic_delay_min": round(traffic_s / 60),
             "summary": f"{round(distance_m / 1000, 1)} km · {round(duration_s / 60)} min drive",
         },
-        "maps_url": (
-            f"https://www.bing.com/maps?rtp=adr.{o_addr}~adr.{d_addr}"
-        ),
+        "weather": weather,
+        "maps_url": f"https://www.bing.com/maps?rtp=adr.{o_addr}~adr.{d_addr}",
     }
+
+
+async def _fetch_route(url: str) -> dict | None:
+    try:
+        async with httpx.AsyncClient(timeout=15) as client:
+            resp = await client.get(url)
+        return resp.json() if resp.status_code == 200 else None
+    except Exception:
+        return None

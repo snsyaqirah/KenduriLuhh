@@ -183,7 +183,7 @@ export function parseMessages(messages: AgentMessage[], mode: 'katering' | 'rewa
     const plain = stripMd(shoppingSource.content);
     shoppingLines = plain
       .split('\n')
-      .filter((l) => /\d/.test(l) && /kg|g\b|liter|botol|biji|gantang|cupan|papan|ekor|ikat|beg|keping/i.test(l))
+      .filter((l) => /\d/.test(l) && /kg|g\b|liter|ml\b|botol|biji|papan|ekor|ikat|beg|keping/i.test(l))
       .map((l) => l.replace(/^[-•*\d.]+\s*/, '').trim())
       .filter((l) => l.length > 4)
       .slice(0, 20);

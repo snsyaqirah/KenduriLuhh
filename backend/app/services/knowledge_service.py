@@ -169,6 +169,6 @@ def build_task_string(data: dict) -> str:
                 f"- Lokasi: {location}\n"
                 f"- Menu yang dicadangkan: {prefs_str}"
                 f"{dietary_str}{special_str}{coord_str}\n\n"
-                f"Tolong bagi senarai beli-belah dalam ukuran isi rumah (gantang, cupan) "
+                f"Tolong bagi senarai beli-belah dalam unit metrik (kg, g, L, ml) "
                 f"dan jadual untuk kami masak sendiri."
             )

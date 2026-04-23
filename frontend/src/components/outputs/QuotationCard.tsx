@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { FileText, Download } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FileText, Download, ChevronDown } from 'lucide-react';
 import { generateQuotationPdf } from '../../utils/generatePdf';
 import type { ParsedOutput } from '../../utils/parseMessages';
 
@@ -51,6 +52,7 @@ const T = {
 export function QuotationCard({ data, language = 'ms' }: Props) {
   const { budget, menuItems, totalPax, finalSummary } = data;
   const t = T[language];
+  const [menuOpen, setMenuOpen] = useState(true);
 
   return (
     <motion.div
@@ -93,17 +95,34 @@ export function QuotationCard({ data, language = 'ms' }: Props) {
       <div className="p-5 flex flex-col gap-4">
         {menuItems.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">
-              {t.menu}
-            </p>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1">
-              {menuItems.map((item, i) => (
-                <li key={i} className="flex items-center gap-2 text-sm text-stone-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 mb-2 cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider group-hover:text-stone-700 transition-colors">
+                {t.menu}
+              </p>
+              <ChevronDown size={12} className={`text-stone-400 transition-transform duration-200 ${menuOpen ? '' : '-rotate-90'}`} />
+            </button>
+            <AnimatePresence initial={false}>
+              {menuOpen && (
+                <motion.ul
+                  key="menu"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-1 overflow-hidden"
+                >
+                  {menuItems.map((item, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm text-stone-700">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         )}
 

@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion';
-import { ShoppingBasket, Download } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingBasket, Download, ChevronDown } from 'lucide-react';
 import { generateQuotationPdf } from '../../utils/generatePdf';
 import type { ParsedOutput } from '../../utils/parseMessages';
 
@@ -57,6 +58,8 @@ export function ShoppingList({ data, language = 'ms' }: Props) {
   const { shoppingLines, budget, totalPax, menuItems, finalSummary } = data;
   const t = T[language];
   const tips = TIPS[language];
+  const [menuOpen, setMenuOpen] = useState(true);
+  const [ingredientsOpen, setIngredientsOpen] = useState(true);
 
   return (
     <motion.div
@@ -92,38 +95,72 @@ export function ShoppingList({ data, language = 'ms' }: Props) {
       <div className="p-5 flex flex-col gap-4">
         {menuItems.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">
-              {t.menu}
-            </p>
-            <ul className="flex flex-wrap gap-1.5">
-              {menuItems.map((item, i) => (
-                <li key={i} className="text-xs bg-teal-50 border border-teal-100 text-teal-700 px-2.5 py-1 rounded-full">
-                  {item}
-                </li>
-              ))}
-            </ul>
+            <button
+              onClick={() => setMenuOpen((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 mb-2 cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider group-hover:text-stone-700 transition-colors">
+                {t.menu}
+              </p>
+              <ChevronDown size={12} className={`text-stone-400 transition-transform duration-200 ${menuOpen ? '' : '-rotate-90'}`} />
+            </button>
+            <AnimatePresence initial={false}>
+              {menuOpen && (
+                <motion.ul
+                  key="menu"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex flex-wrap gap-1.5 overflow-hidden"
+                >
+                  {menuItems.map((item, i) => (
+                    <li key={i} className="text-xs bg-teal-50 border border-teal-100 text-teal-700 px-2.5 py-1 rounded-full">
+                      {item}
+                    </li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         )}
 
         {shoppingLines.length > 0 && (
           <div>
-            <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">
-              {t.ingredients}
-            </p>
-            <ul className="flex flex-col gap-1.5">
-              {shoppingLines.map((line, i) => (
-                <motion.li
-                  key={i}
-                  initial={{ opacity: 0, x: -6 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.03 }}
-                  className="flex items-start gap-2 text-xs text-stone-700"
+            <button
+              onClick={() => setIngredientsOpen((v) => !v)}
+              className="w-full flex items-center justify-between gap-2 mb-2 cursor-pointer group"
+            >
+              <p className="text-xs font-semibold text-stone-500 uppercase tracking-wider group-hover:text-stone-700 transition-colors">
+                {t.ingredients}
+              </p>
+              <ChevronDown size={12} className={`text-stone-400 transition-transform duration-200 ${ingredientsOpen ? '' : '-rotate-90'}`} />
+            </button>
+            <AnimatePresence initial={false}>
+              {ingredientsOpen && (
+                <motion.ul
+                  key="ingredients"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex flex-col gap-1.5 overflow-hidden"
                 >
-                  <span className="w-4 h-4 rounded border border-stone-200 bg-stone-50 flex-shrink-0 mt-0.5" />
-                  {line}
-                </motion.li>
-              ))}
-            </ul>
+                  {shoppingLines.map((line, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.03 }}
+                      className="flex items-start gap-2 text-xs text-stone-700"
+                    >
+                      <span className="w-4 h-4 rounded border border-stone-200 bg-stone-50 flex-shrink-0 mt-0.5" />
+                      {line}
+                    </motion.li>
+                  ))}
+                </motion.ul>
+              )}
+            </AnimatePresence>
           </div>
         )}
 

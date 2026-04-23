@@ -185,12 +185,17 @@ async def stream_chat(session_id: str):
                     return
 
                 ts = datetime.utcnow().isoformat()
-                audit = _classify_action(agent_name, content)
-                session_service.add_message(session_id, agent_name, content, audit)
+                # Strip RAG context block from the user task message before display
+                display_content = content
+                if agent_name == "user":
+                    display_content = re.split(r"\n\n📚", content)[0].strip()
+
+                audit = _classify_action(agent_name, display_content)
+                session_service.add_message(session_id, agent_name, display_content, audit)
                 yield {"data": json.dumps({
                     "type": "agent_message",
                     "agent": agent_name,
-                    "content": content,
+                    "content": display_content,
                     "timestamp": ts,
                     "audit": audit,
                 })}

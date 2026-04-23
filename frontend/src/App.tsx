@@ -11,6 +11,7 @@ import { stripMd } from './utils/parseMessages';
 export default function App() {
   const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, startChat, stopChat, replaySession } = useAgentChat();
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [panelCollapsed, setPanelCollapsed] = useState(false);
 
   const isActive = status === 'loading' || status === 'running' || status === 'reconnecting';
   const showFeed = messages.length > 0 || isActive;
@@ -190,28 +191,49 @@ export default function App() {
                 </div>
               </div>
 
-              {/* Right — Live summary (running) or Output Panel (done) */}
-              <div className="w-full lg:w-80 xl:w-96 flex-shrink-0 lg:sticky lg:top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
+              {/* Right — collapsible panel */}
+              <div className={`flex-shrink-0 lg:sticky lg:top-24 transition-all duration-300 ${panelCollapsed ? 'w-full lg:w-10' : 'w-full lg:w-80 xl:w-96'}`}>
+                {/* Collapse toggle button (desktop only) */}
+                <button
+                  onClick={() => setPanelCollapsed((v) => !v)}
+                  title={panelCollapsed
+                    ? (language === 'en' ? 'Expand panel' : 'Kembangkan panel')
+                    : (language === 'en' ? 'Collapse panel' : 'Kecilkan panel')}
+                  className="hidden lg:flex items-center justify-center w-7 h-7 rounded-full bg-white border border-stone-200 hover:border-stone-400 text-stone-400 hover:text-stone-700 text-xs shadow-sm transition-all mb-2 ml-auto cursor-pointer"
+                >
+                  {panelCollapsed ? '◀' : '▶'}
+                </button>
+
                 <AnimatePresence mode="wait">
-                  {status === 'done' ? (
+                  {!panelCollapsed && (
                     <motion.div
-                      key="output"
-                      initial={{ opacity: 0, x: 12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0 }}
+                      key="panel-content"
+                      initial={{ opacity: 0, width: 0 }}
+                      animate={{ opacity: 1, width: 'auto' }}
+                      exit={{ opacity: 0, width: 0 }}
+                      className="max-h-[calc(100vh-6rem)] overflow-y-auto"
                     >
-                      <OutputPanel
-                        messages={messages}
-                        mode={mode}
-                        onReset={stopChat}
-                        language={language}
-                        originalRequest={originalRequest}
-                        onSpikeUpdate={startChat}
-                      />
-                    </motion.div>
-                  ) : (
-                    <motion.div key="live" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                      <LiveSummaryPanel messages={messages} status={status} language={language} />
+                      {status === 'done' ? (
+                        <motion.div
+                          key="output"
+                          initial={{ opacity: 0, x: 12 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0 }}
+                        >
+                          <OutputPanel
+                            messages={messages}
+                            mode={mode}
+                            onReset={stopChat}
+                            language={language}
+                            originalRequest={originalRequest}
+                            onSpikeUpdate={startChat}
+                          />
+                        </motion.div>
+                      ) : (
+                        <motion.div key="live" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                          <LiveSummaryPanel messages={messages} status={status} language={language} />
+                        </motion.div>
+                      )}
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -223,7 +245,7 @@ export default function App() {
 
       {/* ── Footer ── */}
       <footer className="border-t border-stone-200 bg-white text-center py-4 text-xs text-stone-400">
-        KenduriLuhh · iNextLabs Hackathon 2026 · Powered by Azure OpenAI & AutoGen
+        KenduriLuhh · Code; Without Barriers Hackathon 2026 · Powered by Azure OpenAI & AutoGen
       </footer>
 
       {/* ── History drawer ── */}

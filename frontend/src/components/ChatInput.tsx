@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Users, Wallet, MapPin, Calendar, Utensils, FileText, Percent, User, Globe } from 'lucide-react';
 import { ModeToggle } from './ModeToggle';
+import { useChatStore } from '../store/chatStore';
 import type { CateringRequest, Language, Mode } from '../types';
 
 interface Props {
@@ -42,8 +43,14 @@ const COPY = {
 } as const;
 
 export function ChatInput({ onSubmit, disabled }: Props) {
+  const setStoreLang = useChatStore((s) => s.setLanguage);
   const [mode, setMode]         = useState<Mode>('katering');
   const [language, setLanguage] = useState<Language>('ms');
+
+  function handleLanguageChange(lang: Language) {
+    setLanguage(lang);
+    setStoreLang(lang); // sync header + status bar immediately
+  }
   const [eventType, setEventType]     = useState('');
   const [pax, setPax]                 = useState('');
   const [budget, setBudget]           = useState('');
@@ -107,7 +114,7 @@ export function ChatInput({ onSubmit, disabled }: Props) {
                 key={lang}
                 type="button"
                 disabled={disabled}
-                onClick={() => setLanguage(lang)}
+                onClick={() => handleLanguageChange(lang)}
                 className={[
                   'relative flex-1 rounded-lg py-2.5 text-xs font-semibold transition-colors duration-200 cursor-pointer z-10',
                   'focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500',

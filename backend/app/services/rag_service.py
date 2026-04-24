@@ -233,6 +233,15 @@ def get_rag_context_for_request(data: dict) -> str:
     Build a RAG query from a CateringRequest dict and return the formatted
     context block ready to append to the agent task string.
     """
+    context, _, _ = get_rag_context_with_meta(data)
+    return context
+
+
+def get_rag_context_with_meta(data: dict) -> tuple[str, int, list[str]]:
+    """
+    Like get_rag_context_for_request but also returns chunk count and source files.
+    Returns (formatted_context, chunk_count, unique_sources_list).
+    """
     language = data.get("language", "ms")
     query_parts = [
         data.get("event_type", ""),
@@ -244,4 +253,13 @@ def get_rag_context_for_request(data: dict) -> str:
     ]
     query = " ".join(p for p in query_parts if p).strip()
     chunks = retrieve(query, top_k=8)
-    return format_rag_context(chunks, language)
+    context = format_rag_context(chunks, language)
+    # Deduplicate sources while preserving order
+    seen: set[str] = set()
+    sources: list[str] = []
+    for c in chunks:
+        s = c["source"]
+        if s not in seen:
+            seen.add(s)
+            sources.append(s)
+    return context, len(chunks), sources

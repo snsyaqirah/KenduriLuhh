@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChefHat, Calculator, ShoppingBasket, Truck, Crown, UserCheck, Eye } from 'lucide-react';
+import { ChefHat, Calculator, ShoppingBasket, Truck, Crown, UserCheck, Eye, Database } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChatStore } from '../store/chatStore';
+import type { RagThinking } from '../store/chatStore';
 import type { AgentMessage } from '../types';
 
 const AGENT_META: Record<string, {
@@ -32,15 +33,20 @@ interface Props {
 
 export function AgentChatFeed({ messages, typingAgent, status }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
+  const ragThinking = useChatStore((s) => s.ragThinking);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, typingAgent]);
 
-  if (messages.length === 0 && !typingAgent && status === 'idle') return null;
+  if (messages.length === 0 && !typingAgent && status === 'idle' && !ragThinking) return null;
 
   return (
     <div className="flex flex-col gap-3">
+      <AnimatePresence>
+        {ragThinking && <RagThinkingBubble key="rag-thinking" thinking={ragThinking} />}
+      </AnimatePresence>
+
       <AnimatePresence initial={false}>
         {messages.map((msg, i) => (
           <MessageBubble key={i} msg={msg} index={i} />
@@ -172,6 +178,61 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
           </div>
         )}
       </div>
+    </motion.div>
+  );
+}
+
+function RagThinkingBubble({ thinking }: { thinking: RagThinking }) {
+  const [open, setOpen] = useState(false);
+  const language = useChatStore((s) => s.language);
+  const sourceShort = thinking.sources.map((s) => s.replace('.json', '')).join(', ');
+  const label = language === 'en'
+    ? `Retrieved ${thinking.chunks} chunks · ${sourceShort}`
+    : `Ditemui ${thinking.chunks} entri KB · ${sourceShort}`;
+  const title = language === 'en' ? 'Knowledge Base Retrieval (RAG)' : 'Pengambilan Pangkalan Pengetahuan (RAG)';
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: -6 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.25 }}
+      className="rounded-xl border border-violet-100 border-l-4 border-l-violet-400 bg-violet-50/60 p-3 shadow-sm"
+    >
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex w-full items-center gap-2 text-left"
+      >
+        <span className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-600">
+          <Database size={12} />
+        </span>
+        <span className="flex-1 text-xs font-semibold text-violet-700">{title}</span>
+        <span className="text-xs text-violet-400 font-mono mr-1">{label}</span>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          className="text-violet-400 text-xs"
+        >
+          ▼
+        </motion.span>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            key="rag-content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="mt-2 rounded-lg border border-violet-200 bg-white px-3 py-2 text-xs text-stone-600 font-mono whitespace-pre-wrap leading-relaxed max-h-64 overflow-y-auto">
+              {thinking.content}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }

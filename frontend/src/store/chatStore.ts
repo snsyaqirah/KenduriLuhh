@@ -3,6 +3,12 @@ import type { AgentMessage, CateringRequest, Language, Mode } from '../types';
 
 export type Status = 'idle' | 'loading' | 'running' | 'reconnecting' | 'done' | 'error';
 
+export interface RagThinking {
+  content: string;
+  chunks: number;
+  sources: string[];
+}
+
 interface ChatStore {
   mode: Mode;
   language: Language;
@@ -15,6 +21,7 @@ interface ChatStore {
   retryAttempt: number;
   originalRequest: CateringRequest | null;
   tokenCount: number | null;
+  ragThinking: RagThinking | null;
 
   setMode: (mode: Mode) => void;
   setLanguage: (lang: Language) => void;
@@ -27,6 +34,7 @@ interface ChatStore {
   setReconnecting: (attempt: number) => void;
   setOriginalRequest: (req: CateringRequest) => void;
   setTokenCount: (n: number) => void;
+  setRagThinking: (t: RagThinking) => void;
   reset: () => void;
 }
 
@@ -42,6 +50,7 @@ const initialState = {
   retryAttempt: 0,
   originalRequest: null,
   tokenCount: null as number | null,
+  ragThinking: null as RagThinking | null,
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -67,5 +76,6 @@ export const useChatStore = create<ChatStore>((set) => ({
   setReconnecting: (attempt) => set({ status: 'reconnecting', retryAttempt: attempt }),
   setOriginalRequest: (originalRequest) => set({ originalRequest }),
   setTokenCount: (tokenCount) => set({ tokenCount }),
+  setRagThinking: (ragThinking) => set({ ragThinking }),
   reset: () => set(initialState),
 }));

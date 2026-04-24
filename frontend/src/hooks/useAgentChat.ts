@@ -39,6 +39,14 @@ export function useAgentChat() {
     es.onmessage = (e) => {
       const event: SSEEvent = JSON.parse(e.data);
 
+      if (event.type === 'thinking' && event.content) {
+        useChatStore.getState().setRagThinking({
+          content: event.content,
+          chunks: event.chunks ?? 0,
+          sources: event.sources ?? [],
+        });
+      }
+
       if (event.type === 'agent_message' && event.agent && event.content) {
         useChatStore.getState().setTypingAgent(event.agent);
         useChatStore.getState().addMessage({

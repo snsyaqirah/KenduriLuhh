@@ -15,7 +15,7 @@ export interface AgentMessage {
 }
 
 export interface SSEEvent {
-  type: 'agent_message' | 'done' | 'error';
+  type: 'agent_message' | 'done' | 'error' | 'thinking';
   agent?: string;
   content?: string;
   timestamp?: string;
@@ -23,6 +23,8 @@ export interface SSEEvent {
   token_count?: number;
   message?: string;
   audit?: AuditEntry;
+  chunks?: number;
+  sources?: string[];
 }
 
 export interface ChatStartResponse {

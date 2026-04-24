@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChefHat, Calculator, ShoppingBasket, Truck, Crown } from 'lucide-react';
+import { ChefHat, Calculator, ShoppingBasket, Truck, Crown, UserCheck, Eye } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useChatStore } from '../store/chatStore';
@@ -13,11 +13,13 @@ const AGENT_META: Record<string, {
   nameCls: string;
   emoji: string;
 }> = {
+  Pelanggan:    { Icon: UserCheck,     border: 'border-l-teal-400',    badge: 'bg-teal-100 text-teal-700',      nameCls: 'text-teal-700',    emoji: '👤' },
   Tok_Penghulu: { Icon: Crown,         border: 'border-l-emerald-500', badge: 'bg-emerald-100 text-emerald-700', nameCls: 'text-emerald-700', emoji: '👴🏽' },
   Mak_Tok:      { Icon: ChefHat,       border: 'border-l-rose-400',    badge: 'bg-rose-100 text-rose-700',      nameCls: 'text-rose-700',    emoji: '👵🏽' },
   Tokey_Pasar:  { Icon: ShoppingBasket,border: 'border-l-blue-400',    badge: 'bg-blue-100 text-blue-700',      nameCls: 'text-blue-700',    emoji: '🛒' },
   Bendahari:    { Icon: Calculator,    border: 'border-l-amber-400',   badge: 'bg-amber-100 text-amber-700',    nameCls: 'text-amber-700',   emoji: '💰' },
   Abang_Lorry:  { Icon: Truck,         border: 'border-l-purple-400',  badge: 'bg-purple-100 text-purple-700',  nameCls: 'text-purple-700',  emoji: '🚛' },
+  Pemantau:     { Icon: Eye,           border: 'border-l-indigo-400',  badge: 'bg-indigo-100 text-indigo-700',  nameCls: 'text-indigo-700',  emoji: '🔍' },
 };
 
 const DEFAULT_META = { Icon: Crown, border: 'border-l-stone-300', badge: 'bg-stone-100 text-stone-600', nameCls: 'text-stone-600', emoji: '🤖' };
@@ -175,11 +177,13 @@ function MessageBubble({ msg, index }: { msg: AgentMessage; index: number }) {
 }
 
 const AGENT_DOT_COLOR: Record<string, string> = {
+  Pelanggan:    'bg-teal-400',
   Tok_Penghulu: 'bg-emerald-500',
   Mak_Tok:      'bg-rose-400',
   Tokey_Pasar:  'bg-blue-400',
   Bendahari:    'bg-amber-400',
   Abang_Lorry:  'bg-purple-400',
+  Pemantau:     'bg-indigo-400',
 };
 
 function TypingBubble({ agent }: { agent: string }) {

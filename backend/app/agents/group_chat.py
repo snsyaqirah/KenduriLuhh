@@ -1,9 +1,9 @@
 """
 group_chat.py — KenduriLuhh Multi-Agent Orchestration
 
-Wires the 5 agents into a SelectorGroupChat where an LLM picks who speaks next
-based on each agent's description. Tok_Penghulu leads; the team ends when he
-writes "SELESAI".
+Wires 7 agents into a SelectorGroupChat:
+  Pelanggan → Tok_Penghulu → Mak_Tok → Tokey_Pasar → Bendahari
+  → [revision loop once if needed] → Abang_Lorry → Pemantau → Tok_Penghulu (SELESAI)
 
 Usage:
     from app.agents.group_chat import create_team, run_team_stream
@@ -20,14 +20,14 @@ from autogen_agentchat.base import TaskResult
 
 from app.config import settings
 from app.agents.base_agent import build_model_client_args
+from app.agents.pelanggan import create_pelanggan
 from app.agents.tok_penghulu import create_tok_penghulu
 from app.agents.mak_tok import create_mak_tok
 from app.agents.tokey_pasar import create_tokey_pasar
 from app.agents.bendahari import create_bendahari
 from app.agents.abang_lorry import create_abang_lorry
+from app.agents.pemantau import create_pemantau
 
-# Custom selector prompt — guides the LLM to pick the right agent.
-# {roles} and {participants} are filled in by SelectorGroupChat automatically.
 SELECTOR_PROMPT = """You are the agent selector for KenduriLuhh catering AI.
 
 Available agents and their roles:
@@ -38,31 +38,37 @@ Conversation history so far:
 
 STRICT SELECTION RULES — follow in priority order:
 
-RULE 0 (Force close): Count the total number of agent messages in the history above.
-  If there are 14 or more agent messages → ALWAYS select Tok_Penghulu to close with SELESAI. No exceptions.
+RULE 0 (Force close): Count total agent messages in history.
+  If there are 20 or more agent messages → ALWAYS select Tok_Penghulu to close with SELESAI. No exceptions.
 
-RULE 1 (Start): No agent has spoken yet → select Tok_Penghulu.
+RULE 1 (Start): No agent has spoken yet → select Pelanggan.
 
-RULE 2 (Menu): Tok_Penghulu just opened → select Mak_Tok.
+RULE 2 (Handoff after intake): Pelanggan just confirmed intake (message contains "DISAHKAN" or "CONFIRMED") → select Tok_Penghulu.
 
-RULE 3 (Pricing): Mak_Tok just proposed a menu → select Tokey_Pasar.
+RULE 3 (Menu): Tok_Penghulu just opened the discussion → select Mak_Tok.
 
-RULE 4 (Budget audit): Tokey_Pasar just gave a price report → select Bendahari.
+RULE 4 (Pricing): Mak_Tok just proposed a menu → select Tokey_Pasar.
+
+RULE 5 (Budget audit): Tokey_Pasar just gave a price report → select Bendahari.
   MANDATORY. Never skip. Bendahari is the ONLY agent who can approve or reject the budget.
 
-RULE 5 (Revision): Bendahari said GAGAL or FAILED → select Mak_Tok for a cheaper menu.
+RULE 6 (Revision): Bendahari said GAGAL or FAILED → select Mak_Tok for a cheaper menu.
   After Mak_Tok revises → select Tokey_Pasar to re-price → then Bendahari again to re-audit.
   This revision cycle happens at most ONCE. Do not loop more than once.
 
-RULE 6 (Logistics): Bendahari said LULUS → select Abang_Lorry IMMEDIATELY.
+RULE 7 (Logistics): Bendahari said LULUS or APPROVED → select Abang_Lorry IMMEDIATELY.
   Do NOT go back to Mak_Tok or Tokey_Pasar after LULUS. Straight to Abang_Lorry.
 
-RULE 7 (Close): Abang_Lorry just finished logistics → select Tok_Penghulu.
-  Tok_Penghulu MUST output a summary and the word SELESAI in this message.
+RULE 8 (Monitor): Abang_Lorry just finished logistics → select Pemantau.
+  Pemantau checks risks and confirms execution readiness.
+
+RULE 9 (Close): Pemantau just finished risk report (message contains "SEDIA UNTUK DITERUSKAN" or "READY TO PROCEED") → select Tok_Penghulu.
+  Tok_Penghulu MUST output final summary + SELESAI in this message.
 
 PROHIBITED SELECTIONS:
-- Do NOT select Mak_Tok, Tokey_Pasar, Bendahari, or Abang_Lorry after Abang_Lorry has finished.
-- Do NOT select any agent who has already completed their role to give "motivational" or "supportive" messages.
+- Do NOT select Pelanggan after the first message.
+- Do NOT select Mak_Tok, Tokey_Pasar, Bendahari, or Abang_Lorry after Pemantau has finished.
+- Do NOT select any agent who has already completed their role for "motivational" or "supportive" messages.
 - Do NOT let agents respond to each other's cheerleading.
 
 Select ONE agent name from: {participants}
@@ -72,7 +78,11 @@ Return ONLY the agent name, nothing else.
 
 def create_team(mode: str = "katering", language: str = "ms", weather_data: str = "") -> SelectorGroupChat:
     """
-    Creates and returns a configured 5-agent SelectorGroupChat team.
+    Creates and returns a configured 7-agent SelectorGroupChat team.
+
+    Agent flow:
+        Pelanggan → Tok_Penghulu → Mak_Tok → Tokey_Pasar → Bendahari
+        → Abang_Lorry → Pemantau → Tok_Penghulu (SELESAI)
 
     Args:
         mode: "katering" (professional) or "rewang" (DIY kenduri)
@@ -84,18 +94,20 @@ def create_team(mode: str = "katering", language: str = "ms", weather_data: str 
     """
     selector_client = AzureOpenAIChatCompletionClient(**build_model_client_args(settings))
 
+    pelanggan   = create_pelanggan(mode, language)
     tok_penghulu = create_tok_penghulu(mode, language)
-    mak_tok = create_mak_tok(mode, language)
+    mak_tok     = create_mak_tok(mode, language)
     tokey_pasar = create_tokey_pasar(mode, language)
-    bendahari = create_bendahari(mode, language)
+    bendahari   = create_bendahari(mode, language)
     abang_lorry = create_abang_lorry(mode, language, weather_data)
+    pemantau    = create_pemantau(mode, language)
 
     # TextMentionTermination: ends when any agent writes "SELESAI"
-    # MaxMessageTermination: safety cap to avoid infinite loops and burning tokens
-    termination = TextMentionTermination("SELESAI") | MaxMessageTermination(18)
+    # MaxMessageTermination: 24 messages — 7 agents need more room than 5
+    termination = TextMentionTermination("SELESAI") | MaxMessageTermination(24)
 
     team = SelectorGroupChat(
-        participants=[tok_penghulu, mak_tok, tokey_pasar, bendahari, abang_lorry],
+        participants=[pelanggan, tok_penghulu, mak_tok, tokey_pasar, bendahari, abang_lorry, pemantau],
         model_client=selector_client,
         termination_condition=termination,
         selector_prompt=SELECTOR_PROMPT,

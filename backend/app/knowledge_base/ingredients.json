@@ -143,12 +143,14 @@
       "retail_price_myr": 20.0,
       "pasar_malam_price_myr": 18.0,
       "halal_certified": true,
+      "stock_status": "low_stock",
+      "lead_time_days": 1,
       "substitutes": [
         "ayam_broiler"
       ],
       "shelf_life_days": 2,
       "rewang_measure": "1 ekor (~1kg) untuk 4 orang",
-      "notes": "⚠️ MAHAL. Premium flavour but significantly pricier. Only for high-budget events."
+      "notes": "⚠️ MAHAL. Premium flavour but significantly pricier. Only for high-budget events. Call supplier 1 day ahead."
     },
     {
       "id": "daging_lembu",
@@ -160,13 +162,15 @@
       "retail_price_myr": 43.38,
       "pasar_malam_price_myr": 36.0,
       "halal_certified": true,
+      "stock_status": "order_required",
+      "lead_time_days": 2,
       "substitutes": [
         "daging_lembu_import",
         "ayam_broiler"
       ],
       "shelf_life_days": 3,
       "rewang_measure": "1 kg untuk 6-7 orang (rendang)",
-      "notes": "⚠️ MAHAL. Standard for rendang and gulai. Bulk order (>20kg) gets 5% discount at Pasar Borong.",
+      "notes": "⚠️ MAHAL. Standard for rendang and gulai. Bulk order (>20kg) gets 5% discount at Pasar Borong. Order 2 days in advance.",
       "price_data_live": {
         "source": "PriceCatcher 2026-04",
         "runcit_national_avg": 43.38,
@@ -245,12 +249,14 @@
       "retail_price_myr": 45.0,
       "pasar_malam_price_myr": 42.0,
       "halal_certified": true,
+      "stock_status": "order_required",
+      "lead_time_days": 3,
       "substitutes": [
         "daging_lembu"
       ],
       "shelf_life_days": 3,
       "rewang_measure": "1 kg untuk 5-6 orang",
-      "notes": "⚠️ MAHAL. Premium. Used for kambing golek, kari kambing, briyani. Only for premium events."
+      "notes": "⚠️ MAHAL. Premium. Used for kambing golek, kari kambing, briyani. Only for premium events. Pre-order 3 days ahead."
     },
     {
       "id": "udang_harimau",

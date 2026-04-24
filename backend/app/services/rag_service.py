@@ -54,11 +54,19 @@ def _chunk_ingredients() -> list[dict]:
     chunks = []
     for i in ingredients:
         subs = ", ".join(i.get("substitutes", []))
+        stock = i.get("stock_status", "available")
+        lead = i.get("lead_time_days")
+        stock_note = (
+            f"⚠️ STOK RENDAH (hubungi pembekal {lead} hari awal)" if stock == "low_stock" and lead
+            else f"⚠️ PERLU ORDER {lead} HARI AWAL" if stock == "order_required" and lead
+            else "Tersedia"
+        )
         text = (
             f"Bahan: {i['name_ms']} ({i.get('name_en', '')}) | "
             f"Kategori: {i.get('category', '')} | "
             f"Harga Pasar Borong: RM{i['pasar_borong_price_myr']:.2f}/{i['unit']} | "
             f"Harga runcit: RM{i.get('retail_price_myr', 0):.2f}/{i['unit']} | "
+            f"Status stok: {stock_note} | "
             f"Halal: {i.get('halal_certified', True)} | "
             f"Gantikan dengan: {subs or '-'} | "
             f"Ukuran rewang: {i.get('rewang_measure', '-')} | "

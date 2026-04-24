@@ -20,6 +20,7 @@ export interface SSEEvent {
   content?: string;
   timestamp?: string;
   total_messages?: number;
+  token_count?: number;
   message?: string;
   audit?: AuditEntry;
 }

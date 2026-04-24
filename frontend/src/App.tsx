@@ -9,7 +9,7 @@ import { useAgentChat } from './hooks/useAgentChat';
 import { stripMd } from './utils/parseMessages';
 
 export default function App() {
-  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, startChat, stopChat, replaySession } = useAgentChat();
+  const { messages, status, typingAgent, error, doneAgents, mode, language, retryAttempt, originalRequest, tokenCount, startChat, stopChat, replaySession } = useAgentChat();
   const [historyOpen, setHistoryOpen] = useState(false);
   const [panelCollapsed, setPanelCollapsed] = useState(false);
 
@@ -104,6 +104,7 @@ export default function App() {
           doneAgents={doneAgents}
           status={status}
           language={language}
+          tokenCount={tokenCount}
         />
 
         {/* Error banner */}

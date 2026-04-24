@@ -53,6 +53,9 @@ export function useAgentChat() {
       if (event.type === 'done') {
         useChatStore.getState().setStatus('done');
         useChatStore.getState().setTypingAgent(null);
+        if (event.token_count != null) {
+          useChatStore.getState().setTokenCount(event.token_count);
+        }
         es.close();
         // Auto-save to history
         const state = useChatStore.getState();

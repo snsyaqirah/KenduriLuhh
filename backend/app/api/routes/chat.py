@@ -160,6 +160,7 @@ async def stream_chat(session_id: str):
 
     async def _live_stream():
         session_service.set_running(session_id)
+        total_chars = 0  # accumulate to estimate token usage
         try:
             language = session.get("language", "ms")
             weather_data = await get_event_weather(
@@ -176,12 +177,21 @@ async def stream_chat(session_id: str):
             if rag_context:
                 task_text = task_text + "\n\n" + rag_context
 
+            # Count task prompt chars toward token estimate
+            total_chars += len(task_text)
+
             async for agent_name, content in run_team_stream(team, task_text):
                 if agent_name == "__DONE__":
                     session_service.set_done(session_id)
                     done_session = session_service.get_session(session_id)
                     total = len(done_session["messages"]) if done_session else 0
-                    yield {"data": json.dumps({"type": "done", "total_messages": total})}
+                    # Rough token estimate: 4 chars ≈ 1 token (standard GPT heuristic)
+                    approx_tokens = total_chars // 4
+                    yield {"data": json.dumps({
+                        "type": "done",
+                        "total_messages": total,
+                        "token_count": approx_tokens,
+                    })}
                     return
 
                 ts = datetime.utcnow().isoformat()
@@ -190,6 +200,7 @@ async def stream_chat(session_id: str):
                 if agent_name == "user":
                     display_content = re.split(r"\n\n📚", content)[0].strip()
 
+                total_chars += len(display_content)
                 audit = _classify_action(agent_name, display_content)
                 session_service.add_message(session_id, agent_name, display_content, audit)
                 yield {"data": json.dumps({

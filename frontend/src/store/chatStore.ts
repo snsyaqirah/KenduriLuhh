@@ -13,7 +13,8 @@ interface ChatStore {
   typingAgent: string | null;
   doneAgents: string[];
   retryAttempt: number;
-  originalRequest: CateringRequest | null;   // stored for guest spike re-submit
+  originalRequest: CateringRequest | null;
+  tokenCount: number | null;
 
   setMode: (mode: Mode) => void;
   setLanguage: (lang: Language) => void;
@@ -25,6 +26,7 @@ interface ChatStore {
   markAgentDone: (agent: string) => void;
   setReconnecting: (attempt: number) => void;
   setOriginalRequest: (req: CateringRequest) => void;
+  setTokenCount: (n: number) => void;
   reset: () => void;
 }
 
@@ -39,6 +41,7 @@ const initialState = {
   doneAgents: [],
   retryAttempt: 0,
   originalRequest: null,
+  tokenCount: null as number | null,
 };
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -63,5 +66,6 @@ export const useChatStore = create<ChatStore>((set) => ({
     })),
   setReconnecting: (attempt) => set({ status: 'reconnecting', retryAttempt: attempt }),
   setOriginalRequest: (originalRequest) => set({ originalRequest }),
+  setTokenCount: (tokenCount) => set({ tokenCount }),
   reset: () => set(initialState),
 }));

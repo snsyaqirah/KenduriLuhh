@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>KenduriLuhh — Architecture</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #f1f5f9; display: flex; justify-content: center; padding: 0; }
+</style>
+</head>
+<body>
+<svg width="1400" height="960" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Inter, system-ui, sans-serif">
+
+  <!-- Page background -->
+  <rect width="1400" height="960" fill="#f8fafc"/>
+
+  <!-- ═══ HEADER ═══ -->
+  <rect x="0" y="0" width="1400" height="72" fill="#ffffff"/>
+  <line x1="0" y1="72" x2="1400" y2="72" stroke="#e2e8f0" stroke-width="1.5"/>
+  <!-- Left colour bar -->
+  <rect x="0" y="0" width="6" height="72" fill="#2563eb"/>
+  <text x="28" y="30" fill="#1e293b" font-size="20" font-weight="700">KenduriLuhh</text>
+  <text x="28" y="52" fill="#64748b" font-size="12">System Architecture  ·  AI-Powered Multi-Agent System for Smart Catering Operations  ·  CWB Hackathon ASEAN 2026</text>
+
+  <!-- Badge top-right -->
+  <rect x="1230" y="16" width="148" height="40" rx="8" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <text x="1304" y="32" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700">Powered by</text>
+  <text x="1304" y="48" text-anchor="middle" fill="#2563eb" font-size="11" font-weight="700">Azure OpenAI GPT-4o</text>
+
+  <!-- ═══ COLUMN HEADERS ═══ -->
+  <!-- Frontend label -->
+  <rect x="20" y="84" width="200" height="28" rx="6" fill="#dbeafe"/>
+  <text x="120" y="102" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="700" letter-spacing="0.5">FRONTEND</text>
+
+  <!-- Backend label -->
+  <rect x="236" y="84" width="692" height="28" rx="6" fill="#ede9fe"/>
+  <text x="582" y="102" text-anchor="middle" fill="#5b21b6" font-size="11" font-weight="700" letter-spacing="0.5">BACKEND  —  FastAPI + AutoGen 0.4</text>
+
+  <!-- Cloud label -->
+  <rect x="944" y="84" width="436" height="28" rx="6" fill="#dbeafe"/>
+  <text x="1162" y="102" text-anchor="middle" fill="#1d4ed8" font-size="11" font-weight="700" letter-spacing="0.5">AZURE CLOUD + EXTERNAL APIs</text>
+
+  <!-- ════════════════════════════════
+       FRONTEND COLUMN
+  ════════════════════════════════ -->
+  <rect x="20" y="122" width="200" height="748" rx="10" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+
+  <!-- Tech stack -->
+  <rect x="30" y="132" width="180" height="22" rx="5" fill="#eff6ff"/>
+  <text x="120" y="147" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700" letter-spacing="0.4">TECH STACK</text>
+
+  <text x="38" y="170" fill="#374151" font-size="11" font-weight="600">React 18 + Vite + TypeScript</text>
+  <text x="38" y="186" fill="#374151" font-size="11">Tailwind CSS</text>
+  <text x="38" y="202" fill="#374151" font-size="11">Framer Motion</text>
+  <text x="38" y="218" fill="#374151" font-size="11">Zustand (state)</text>
+  <text x="38" y="234" fill="#374151" font-size="11">ReactMarkdown + remark-gfm</text>
+
+  <line x1="30" y1="248" x2="210" y2="248" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- UI Components -->
+  <rect x="30" y="256" width="180" height="22" rx="5" fill="#eff6ff"/>
+  <text x="120" y="271" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700" letter-spacing="0.4">UI COMPONENTS</text>
+
+  <text x="38" y="294" fill="#374151" font-size="11">💬  Live Agent Chat Feed</text>
+  <text x="38" y="312" fill="#374151" font-size="11">🟣  RAG Thinking Block</text>
+  <text x="38" y="330" fill="#374151" font-size="11">📊  Agent Status Bar × 7</text>
+  <text x="38" y="348" fill="#374151" font-size="11">📋  Quotation Card</text>
+  <text x="38" y="366" fill="#374151" font-size="11">🛒  Shopping List</text>
+  <text x="38" y="384" fill="#374151" font-size="11">🥧  Budget Pie Chart</text>
+  <text x="38" y="402" fill="#374151" font-size="11">⏱  Logistics Timeline</text>
+  <text x="38" y="420" fill="#374151" font-size="11">🗺  Route Map</text>
+  <text x="38" y="438" fill="#374151" font-size="11">🌤  Weather Advisory</text>
+  <text x="38" y="456" fill="#374151" font-size="11">🔢  Token Counter</text>
+  <text x="38" y="474" fill="#374151" font-size="11">📜  Session History</text>
+
+  <line x1="30" y1="490" x2="210" y2="490" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Mode -->
+  <rect x="30" y="498" width="180" height="22" rx="5" fill="#eff6ff"/>
+  <text x="120" y="513" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700" letter-spacing="0.4">MODE TOGGLE</text>
+
+  <rect x="36" y="526" width="82" height="28" rx="6" fill="#2563eb"/>
+  <text x="77" y="544" text-anchor="middle" fill="white" font-size="11" font-weight="700">Katering</text>
+  <rect x="124" y="526" width="82" height="28" rx="6" fill="#f1f5f9" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="165" y="544" text-anchor="middle" fill="#94a3b8" font-size="11">Rewang</text>
+  <text x="38" y="570" fill="#64748b" font-size="10">Professional caterer output</text>
+  <text x="38" y="584" fill="#64748b" font-size="10">vs. DIY community cooking</text>
+
+  <line x1="30" y1="600" x2="210" y2="600" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Language -->
+  <rect x="30" y="608" width="180" height="22" rx="5" fill="#eff6ff"/>
+  <text x="120" y="623" text-anchor="middle" fill="#1d4ed8" font-size="10" font-weight="700" letter-spacing="0.4">LANGUAGE</text>
+
+  <text x="38" y="648" fill="#374151" font-size="11">🇲🇾  Bahasa Malaysia (default)</text>
+  <text x="38" y="666" fill="#374151" font-size="11">🇬🇧  English</text>
+
+  <line x1="30" y1="682" x2="210" y2="682" stroke="#e2e8f0" stroke-width="1"/>
+
+  <!-- Scope note -->
+  <rect x="30" y="690" width="180" height="22" rx="5" fill="#fef3c7"/>
+  <text x="120" y="705" text-anchor="middle" fill="#92400e" font-size="10" font-weight="700" letter-spacing="0.4">SCOPE</text>
+
+  <text x="38" y="728" fill="#374151" font-size="11">📍 Klang Valley region</text>
+  <text x="38" y="744" fill="#64748b" font-size="10">KB covers KV wholesale markets:</text>
+  <text x="38" y="760" fill="#64748b" font-size="10">Selayang · Pudu · Shah Alam</text>
+  <text x="38" y="776" fill="#64748b" font-size="10">Seri Kembangan</text>
+  <text x="38" y="796" fill="#374151" font-size="11">🍽  Malaysian halal cuisine</text>
+  <text x="38" y="812" fill="#64748b" font-size="10">Traditional Malay dishes only</text>
+
+  <!-- ═══ ARROWS Frontend ↔ Backend ═══ -->
+  <defs>
+    <marker id="ah" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#2563eb"/>
+    </marker>
+    <marker id="ah2" markerWidth="8" markerHeight="6" refX="1" refY="3" orient="auto">
+      <polygon points="8 0, 0 3, 8 6" fill="#2563eb"/>
+    </marker>
+    <marker id="ah-r" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#7c3aed"/>
+    </marker>
+    <marker id="ah-o" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#ea580c"/>
+    </marker>
+    <marker id="ah-g" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#16a34a"/>
+    </marker>
+    <marker id="ah-c" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#0891b2"/>
+    </marker>
+  </defs>
+
+  <line x1="220" y1="355" x2="236" y2="355" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="228" y="348" text-anchor="middle" fill="#2563eb" font-size="9">HTTP</text>
+  <line x1="236" y1="375" x2="220" y2="375" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ah2)"/>
+  <text x="228" y="390" text-anchor="middle" fill="#2563eb" font-size="9">SSE</text>
+
+  <!-- ════════════════════════════════
+       BACKEND — AutoGen box
+  ════════════════════════════════ -->
+  <rect x="236" y="122" width="700" height="748" rx="10" fill="#fafaf9" stroke="#ddd6fe" stroke-width="1.5"/>
+
+  <!-- AutoGen sub-box -->
+  <rect x="248" y="134" width="326" height="616" rx="8" fill="#ffffff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="248" y="134" width="326" height="36" rx="8" fill="#7c3aed"/>
+  <rect x="248" y="154" width="326" height="16" fill="#7c3aed"/>
+  <text x="411" y="157" text-anchor="middle" fill="white" font-size="12" font-weight="700">AutoGen 0.4 — SelectorGroupChat</text>
+  <text x="411" y="182" text-anchor="middle" fill="#6d28d9" font-size="10">9-rule priority selector  ·  shared conversation memory</text>
+
+  <!-- Agent cards -->
+  <!-- Pelanggan -->
+  <rect x="260" y="192" width="302" height="52" rx="7" fill="#f0fdf9" stroke="#99f6e4" stroke-width="1"/>
+  <rect x="260" y="192" width="4" height="52" rx="2" fill="#0d9488"/>
+  <text x="276" y="213" fill="#0d9488" font-size="13">👤</text>
+  <text x="298" y="211" fill="#134e4a" font-size="12" font-weight="700">Pelanggan</text>
+  <text x="298" y="226" fill="#6b7280" font-size="10" font-weight="600">Customer Agent</text>
+  <text x="298" y="238" fill="#9ca3af" font-size="10">Validates intake · confirms event details</text>
+
+  <!-- Tok Penghulu -->
+  <rect x="260" y="250" width="302" height="52" rx="7" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+  <rect x="260" y="250" width="4" height="52" rx="2" fill="#16a34a"/>
+  <text x="276" y="271" fill="#16a34a" font-size="13">👴🏽</text>
+  <text x="298" y="269" fill="#14532d" font-size="12" font-weight="700">Tok Penghulu</text>
+  <text x="298" y="284" fill="#6b7280" font-size="10" font-weight="600">Orchestrator</text>
+  <text x="298" y="296" fill="#9ca3af" font-size="10">Coordinates negotiation · opens + closes session</text>
+
+  <!-- Mak Tok -->
+  <rect x="260" y="308" width="302" height="52" rx="7" fill="#fff1f2" stroke="#fecdd3" stroke-width="1"/>
+  <rect x="260" y="308" width="4" height="52" rx="2" fill="#dc2626"/>
+  <text x="276" y="329" fill="#dc2626" font-size="13">👵🏽</text>
+  <text x="298" y="327" fill="#7f1d1d" font-size="12" font-weight="700">Mak Tok</text>
+  <text x="298" y="342" fill="#6b7280" font-size="10" font-weight="600">Chef Agent</text>
+  <text x="298" y="354" fill="#9ca3af" font-size="10">Menu planning · portions · halal validation</text>
+
+  <!-- Tokey Pasar -->
+  <rect x="260" y="366" width="302" height="52" rx="7" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+  <rect x="260" y="366" width="4" height="52" rx="2" fill="#2563eb"/>
+  <text x="276" y="387" fill="#2563eb" font-size="13">🛒</text>
+  <text x="298" y="385" fill="#1e3a8a" font-size="12" font-weight="700">Tokey Pasar</text>
+  <text x="298" y="400" fill="#6b7280" font-size="10" font-weight="600">Supplier Agent</text>
+  <text x="298" y="412" fill="#9ca3af" font-size="10">Pricing · stock status · ingredient substitutions</text>
+
+  <!-- Bendahari -->
+  <rect x="260" y="424" width="302" height="52" rx="7" fill="#fffbeb" stroke="#fde68a" stroke-width="1"/>
+  <rect x="260" y="424" width="4" height="52" rx="2" fill="#d97706"/>
+  <text x="276" y="445" fill="#d97706" font-size="13">💰</text>
+  <text x="298" y="443" fill="#78350f" font-size="12" font-weight="700">Bendahari</text>
+  <text x="298" y="458" fill="#6b7280" font-size="10" font-weight="600">Finance Agent</text>
+  <text x="298" y="470" fill="#9ca3af" font-size="10">Budget audit · quotation · approve / reject</text>
+
+  <!-- Abang Lorry -->
+  <rect x="260" y="482" width="302" height="52" rx="7" fill="#faf5ff" stroke="#e9d5ff" stroke-width="1"/>
+  <rect x="260" y="482" width="4" height="52" rx="2" fill="#7c3aed"/>
+  <text x="276" y="503" fill="#7c3aed" font-size="13">🚛</text>
+  <text x="298" y="501" fill="#3b0764" font-size="12" font-weight="700">Abang Lorry</text>
+  <text x="298" y="516" fill="#6b7280" font-size="10" font-weight="600">Logistics Agent</text>
+  <text x="298" y="528" fill="#9ca3af" font-size="10">Timeline (T-3 to T-0) · weather risk flag</text>
+
+  <!-- Pemantau -->
+  <rect x="260" y="540" width="302" height="52" rx="7" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"/>
+  <rect x="260" y="540" width="4" height="52" rx="2" fill="#4f46e5"/>
+  <text x="276" y="561" fill="#4f46e5" font-size="13">🔍</text>
+  <text x="298" y="559" fill="#1e1b4b" font-size="12" font-weight="700">Pemantau</text>
+  <text x="298" y="574" fill="#6b7280" font-size="10" font-weight="600">Monitor Agent</text>
+  <text x="298" y="586" fill="#9ca3af" font-size="10">Final risk checklist: Budget · Halal · Timeline · Inventory · Weather</text>
+
+  <!-- Termination -->
+  <rect x="260" y="602" width="302" height="28" rx="6" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="411" y="620" text-anchor="middle" fill="#94a3b8" font-size="10">TextMentionTermination("SELESAI")  ·  MaxMessages(24)</text>
+
+  <!-- Shared memory box -->
+  <rect x="260" y="640" width="302" height="98" rx="7" fill="#fafafa" stroke="#c7d2fe" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="411" y="660" text-anchor="middle" fill="#4f46e5" font-size="10" font-weight="700">🧠  SHARED MEMORY</text>
+  <text x="411" y="678" text-anchor="middle" fill="#6b7280" font-size="10">All 7 agents share full conversation</text>
+  <text x="411" y="694" text-anchor="middle" fill="#6b7280" font-size="10">history via SelectorGroupChat thread.</text>
+  <text x="411" y="710" text-anchor="middle" fill="#6b7280" font-size="10">Each agent sees prior decisions</text>
+  <text x="411" y="726" text-anchor="middle" fill="#6b7280" font-size="10">before taking its turn.</text>
+
+  <!-- Arrow: AutoGen → RAG (internal) -->
+  <line x1="574" y1="400" x2="590" y2="400" stroke="#ea580c" stroke-width="1.5" marker-end="url(#ah-o)"/>
+  <text x="582" y="394" text-anchor="middle" fill="#ea580c" font-size="9">RAG</text>
+
+  <!-- RAG sub-box -->
+  <rect x="590" y="134" width="332" height="616" rx="8" fill="#ffffff" stroke="#fed7aa" stroke-width="1.5"/>
+  <rect x="590" y="134" width="332" height="36" rx="8" fill="#ea580c"/>
+  <rect x="590" y="154" width="332" height="16" fill="#ea580c"/>
+  <text x="756" y="157" text-anchor="middle" fill="white" font-size="12" font-weight="700">TF-IDF RAG Engine</text>
+  <text x="756" y="182" text-anchor="middle" fill="#9a3412" font-size="10">Retrieves top-8 relevant chunks  ·  injected into agent context prompt</text>
+
+  <!-- KB files -->
+  <!-- menus.json -->
+  <rect x="602" y="192" width="308" height="70" rx="7" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="618" y="210" fill="#9a3412" font-size="11" font-weight="700">📋  menus.json</text>
+  <text x="618" y="227" fill="#374151" font-size="10">15+ traditional Malay dishes — Nasi Minyak, Rendang,</text>
+  <text x="618" y="241" fill="#374151" font-size="10">Dalca, Ayam Masak Merah, Kuah Kacang…</text>
+  <text x="618" y="255" fill="#9ca3af" font-size="10">portions · prep time · halal status · rewang measurements</text>
+
+  <!-- ingredients.json -->
+  <rect x="602" y="268" width="308" height="70" rx="7" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="618" y="286" fill="#9a3412" font-size="11" font-weight="700">🧂  ingredients.json</text>
+  <text x="618" y="303" fill="#374151" font-size="10">Pasar Borong wholesale pricing</text>
+  <text x="618" y="317" fill="#374151" font-size="10">Scraped from PriceCatcher — Dept. of Statistics Malaysia</text>
+  <text x="618" y="331" fill="#9ca3af" font-size="10">+ stock_status simulation (available / low_stock / order_required)</text>
+
+  <!-- suppliers.json -->
+  <rect x="602" y="344" width="308" height="70" rx="7" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="618" y="362" fill="#9a3412" font-size="11" font-weight="700">🏪  suppliers.json</text>
+  <text x="618" y="379" fill="#374151" font-size="10">Wholesale market locations — Klang Valley scoped</text>
+  <text x="618" y="393" fill="#374151" font-size="10">Selayang · Pudu · Shah Alam · Seri Kembangan</text>
+  <text x="618" y="407" fill="#9ca3af" font-size="10">GPS coords · operating hours · specialties</text>
+
+  <!-- rempah_ratus.json -->
+  <rect x="602" y="420" width="308" height="70" rx="7" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="618" y="438" fill="#9a3412" font-size="11" font-weight="700">🌶  rempah_ratus.json</text>
+  <text x="618" y="455" fill="#374151" font-size="10">Traditional Malay spice blend formulas</text>
+  <text x="618" y="469" fill="#374151" font-size="10">Quantity per kg meat · instant substitute options</text>
+  <text x="618" y="483" fill="#9ca3af" font-size="10">Manually curated from traditional Malaysian recipes</text>
+
+  <!-- halal_checklist.json -->
+  <rect x="602" y="496" width="308" height="70" rx="7" fill="#fff7ed" stroke="#fed7aa" stroke-width="1"/>
+  <text x="618" y="514" fill="#9a3412" font-size="11" font-weight="700">✅  halal_checklist.json</text>
+  <text x="618" y="531" fill="#374151" font-size="10">JAKIM-based halal validation rules</text>
+  <text x="618" y="545" fill="#374151" font-size="10">HARAM_REJECT: gelatin · lard · arak_masak · shaoxing wine</text>
+  <text x="618" y="559" fill="#9ca3af" font-size="10">Suggests halal substitutes on flag</text>
+
+  <!-- RAG flow steps -->
+  <rect x="602" y="572" width="308" height="166" rx="7" fill="#fafafa" stroke="#fdba74" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="756" y="592" text-anchor="middle" fill="#ea580c" font-size="10" font-weight="700">RAG RETRIEVAL FLOW</text>
+  <text x="618" y="612" fill="#374151" font-size="10">1.  Build query from CateringRequest fields</text>
+  <text x="618" y="628" fill="#374151" font-size="10">     (event_type + pax + location + mode + preferences)</text>
+  <text x="618" y="646" fill="#374151" font-size="10">2.  TF-IDF score all KB chunks against query</text>
+  <text x="618" y="664" fill="#374151" font-size="10">3.  Retrieve top-8 highest-scoring entries</text>
+  <text x="618" y="682" fill="#374151" font-size="10">4.  Format + inject into agent task prompt</text>
+  <text x="618" y="702" fill="#ea580c" font-size="10" font-weight="600">→  Emitted as SSE "thinking" event → UI thinking block</text>
+  <text x="618" y="720" fill="#ea580c" font-size="10" font-weight="600">→  Sources: menus · ingredients · suppliers · rempah · halal</text>
+
+  <!-- Backend footer — SSE + Session -->
+  <rect x="248" y="762" width="672" height="98" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+  <rect x="248" y="762" width="334" height="98" rx="8" fill="#f0f9ff" stroke="#bae6fd" stroke-width="1"/>
+  <text x="415" y="782" text-anchor="middle" fill="#0369a1" font-size="10" font-weight="700">SERVER-SENT EVENTS  (sse-starlette)</text>
+  <text x="415" y="800" text-anchor="middle" fill="#374151" font-size="10">Event types:  thinking  ·  agent_message  ·  done  ·  error</text>
+  <text x="415" y="816" text-anchor="middle" fill="#64748b" font-size="10">Auto-reconnect  ·  3 retries  ·  2s delay</text>
+  <text x="415" y="832" text-anchor="middle" fill="#64748b" font-size="10">Token count emitted on done event</text>
+  <text x="415" y="848" text-anchor="middle" fill="#64748b" font-size="10">Zustand store → React UI</text>
+
+  <rect x="586" y="762" width="334" height="98" rx="8" fill="#fafaf9" stroke="#d1fae5" stroke-width="1"/>
+  <text x="753" y="782" text-anchor="middle" fill="#065f46" font-size="10" font-weight="700">SESSION SERVICE + HISTORY</text>
+  <text x="753" y="800" text-anchor="middle" fill="#374151" font-size="10">UUID4 sessions  ·  in-memory store  ·  1hr expiry</text>
+  <text x="753" y="816" text-anchor="middle" fill="#64748b" font-size="10">auto-save to localStorage on done</text>
+  <text x="753" y="832" text-anchor="middle" fill="#64748b" font-size="10">Session replay for past conversations</text>
+  <text x="753" y="848" text-anchor="middle" fill="#64748b" font-size="10">FastAPI + uvicorn[standard]</text>
+
+  <!-- ════════════════════════════════
+       CLOUD COLUMN
+  ════════════════════════════════ -->
+  <rect x="944" y="122" width="436" height="748" rx="10" fill="#ffffff" stroke="#bfdbfe" stroke-width="1.5"/>
+
+  <!-- Azure OpenAI -->
+  <rect x="956" y="134" width="412" height="148" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="956" y="134" width="412" height="36" rx="8" fill="#2563eb"/>
+  <rect x="956" y="154" width="412" height="16" fill="#2563eb"/>
+  <text x="1162" y="157" text-anchor="middle" fill="white" font-size="12" font-weight="700">Azure OpenAI Service</text>
+  <text x="1162" y="192" text-anchor="middle" fill="#1d4ed8" font-size="20" font-weight="700">GPT-4o</text>
+  <text x="1162" y="212" text-anchor="middle" fill="#1e40af" font-size="11">Deployment: gpt-4o-kenduri</text>
+  <text x="1162" y="228" text-anchor="middle" fill="#64748b" font-size="10">API version: 2025-01-01-preview</text>
+  <text x="1162" y="244" text-anchor="middle" fill="#64748b" font-size="10">AzureOpenAIChatCompletionClient  ·  all 7 agents share same client</text>
+  <text x="1162" y="260" text-anchor="middle" fill="#64748b" font-size="10">Endpoint: kenduriluhh-ai-service.openai.azure.com</text>
+
+  <!-- Arrow: Backend → Azure OpenAI -->
+  <line x1="936" y1="210" x2="956" y2="210" stroke="#2563eb" stroke-width="1.5" marker-end="url(#ah)"/>
+  <text x="946" y="204" text-anchor="middle" fill="#2563eb" font-size="8">API</text>
+
+  <!-- Azure Maps -->
+  <rect x="956" y="296" width="412" height="130" rx="8" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="956" y="296" width="412" height="36" rx="8" fill="#0891b2"/>
+  <rect x="956" y="316" width="412" height="16" fill="#0891b2"/>
+  <text x="1162" y="319" text-anchor="middle" fill="white" font-size="12" font-weight="700">Azure Maps REST API</text>
+  <text x="1162" y="356" text-anchor="middle" fill="#0e7490" font-size="14">🗺</text>
+  <text x="1162" y="376" text-anchor="middle" fill="#374151" font-size="11">Geocode event destination address</text>
+  <text x="1162" y="392" text-anchor="middle" fill="#374151" font-size="11">Route: nearest Pasar Borong → Venue</text>
+  <text x="1162" y="408" text-anchor="middle" fill="#64748b" font-size="10">Hardcoded KV market coordinates as origin</text>
+
+  <!-- Arrow: Backend → Azure Maps -->
+  <line x1="936" y1="360" x2="956" y2="360" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#ah-c)"/>
+  <text x="946" y="354" text-anchor="middle" fill="#06b6d4" font-size="8">REST</text>
+
+  <!-- Open-Meteo -->
+  <rect x="956" y="440" width="412" height="130" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="956" y="440" width="412" height="36" rx="8" fill="#16a34a"/>
+  <rect x="956" y="460" width="412" height="16" fill="#16a34a"/>
+  <text x="1162" y="463" text-anchor="middle" fill="white" font-size="12" font-weight="700">Open-Meteo  (Free API  ·  No API key)</text>
+  <text x="1162" y="500" text-anchor="middle" fill="#15803d" font-size="14">🌤</text>
+  <text x="1162" y="520" text-anchor="middle" fill="#374151" font-size="11">Live weather forecast at event location</text>
+  <text x="1162" y="536" text-anchor="middle" fill="#374151" font-size="11">WMO weather codes → rain / wind advisory</text>
+  <text x="1162" y="552" text-anchor="middle" fill="#64748b" font-size="10">Tent advisory shown if precipitation code ≥ 51</text>
+
+  <!-- Arrow: Backend → Open-Meteo -->
+  <line x1="936" y1="505" x2="956" y2="505" stroke="#22c55e" stroke-width="1.5" marker-end="url(#ah-g)"/>
+  <text x="946" y="499" text-anchor="middle" fill="#22c55e" font-size="8">HTTP</text>
+
+  <!-- AutoGen framework card -->
+  <rect x="956" y="584" width="412" height="176" rx="8" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="956" y="584" width="412" height="36" rx="8" fill="#6d28d9"/>
+  <rect x="956" y="604" width="412" height="16" fill="#6d28d9"/>
+  <text x="1162" y="607" text-anchor="middle" fill="white" font-size="12" font-weight="700">AutoGen 0.4  —  Microsoft Research</text>
+
+  <text x="974" y="640" fill="#5b21b6" font-size="10" font-weight="700">Packages</text>
+  <text x="974" y="656" fill="#374151" font-size="10">autogen-agentchat==0.4.*</text>
+  <text x="974" y="672" fill="#374151" font-size="10">autogen-ext[azure]==0.4.*</text>
+
+  <text x="1174" y="640" fill="#5b21b6" font-size="10" font-weight="700">Key Classes</text>
+  <text x="1174" y="656" fill="#374151" font-size="10">AssistantAgent × 7</text>
+  <text x="1174" y="672" fill="#374151" font-size="10">SelectorGroupChat</text>
+
+  <text x="974" y="696" fill="#5b21b6" font-size="10" font-weight="700">Streaming</text>
+  <text x="974" y="712" fill="#374151" font-size="10">team.run_stream(task=...)  →  async generator</text>
+  <text x="974" y="728" fill="#374151" font-size="10">→  EventSourceResponse (SSE)</text>
+
+  <text x="974" y="748" fill="#5b21b6" font-size="10" font-weight="700">Termination</text>
+  <text x="974" y="752" fill="#374151" font-size="10">  TextMentionTermination("SELESAI") + MaxMessageTermination(24)</text>
+
+  <!-- Backend footer SSE box (cloud side notes) -->
+  <rect x="956" y="774" width="412" height="86" rx="8" fill="#fafafa" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="1162" y="796" text-anchor="middle" fill="#374151" font-size="10" font-weight="700">CONFIGURATION</text>
+  <text x="1162" y="814" text-anchor="middle" fill="#64748b" font-size="10">pydantic-settings  ·  .env file (not committed)</text>
+  <text x="1162" y="830" text-anchor="middle" fill="#64748b" font-size="10">Fail-fast on missing Azure credentials</text>
+  <text x="1162" y="846" text-anchor="middle" fill="#64748b" font-size="10">CORS restricted  ·  input sanitization  ·  halal layer</text>
+
+  <!-- ════════════════════════════════
+       BONUS CRITERIA FOOTER
+  ════════════════════════════════ -->
+  <rect x="0" y="882" width="1400" height="78" fill="#1e293b"/>
+  <text x="700" y="906" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="700" letter-spacing="0.5">HACKATHON BONUS CRITERIA  —  ALL IMPLEMENTED</text>
+
+  <!-- Criteria chips -->
+  <rect x="30" y="916" width="155" height="28" rx="6" fill="#064e3b"/>
+  <text x="107" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  Shared Memory Across Agents</text>
+
+  <rect x="200" y="916" width="155" height="28" rx="6" fill="#064e3b"/>
+  <text x="277" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  Knowledge Base Integration</text>
+
+  <rect x="370" y="916" width="135" height="28" rx="6" fill="#064e3b"/>
+  <text x="437" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  RAG (TF-IDF)</text>
+
+  <rect x="520" y="916" width="155" height="28" rx="6" fill="#064e3b"/>
+  <text x="597" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  Inventory Simulation</text>
+
+  <rect x="690" y="916" width="175" height="28" rx="6" fill="#064e3b"/>
+  <text x="777" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  Azure Maps API Integration</text>
+
+  <rect x="880" y="916" width="195" height="28" rx="6" fill="#064e3b"/>
+  <text x="977" y="934" text-anchor="middle" fill="#6ee7b7" font-size="10" font-weight="600">✓  Open-Meteo Weather API Integration</text>
+
+  <text x="1260" y="934" text-anchor="middle" fill="#475569" font-size="10">Built by Syaqirah · 2026</text>
+
+</svg>
+</body>
+</html>

@@ -47,7 +47,7 @@ export function useAgentChat() {
         });
       }
 
-      if (event.type === 'agent_message' && event.agent && event.content) {
+      if (event.type === 'agent_message' && event.agent && event.content && event.agent !== 'user') {
         useChatStore.getState().setTypingAgent(event.agent);
         useChatStore.getState().addMessage({
           agent: event.agent,

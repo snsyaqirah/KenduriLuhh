@@ -5,6 +5,7 @@ All data lives in app/knowledge_base/*.json
 
 import json
 import re
+from datetime import date
 from pathlib import Path
 from functools import lru_cache
 
@@ -97,6 +98,7 @@ def build_task_string(data: dict) -> str:
     """
     mode = data.get("mode", "katering")
     language = data.get("language", "ms")
+    today_date = date.today().isoformat()
     event_type = sanitize_input(data.get("event_type", "majlis"))
     pax = data.get("pax", 0)
     budget = data.get("budget_myr", 0)
@@ -118,6 +120,7 @@ def build_task_string(data: dict) -> str:
         if mode == "katering":
             return (
                 f"I am a professional caterer with the following booking:\n"
+                f"- Today's date: {today_date}\n"
                 f"- Event type: {event_type}\n"
                 f"- Number of guests (pax): {pax}\n"
                 f"- Client budget: RM{budget:,.2f}\n"
@@ -130,6 +133,7 @@ def build_task_string(data: dict) -> str:
         else:
             return (
                 f"We are organising a community self-catered event (rewang/gotong-royong):\n"
+                f"- Today's date: {today_date}\n"
                 f"- Event type: {event_type}\n"
                 f"- Number of guests: {pax}\n"
                 f"- Total budget: RM{budget:,.2f}\n"
@@ -150,6 +154,7 @@ def build_task_string(data: dict) -> str:
         if mode == "katering":
             return (
                 f"Saya adalah pengusaha katering yang menerima tempahan berikut:\n"
+                f"- Tarikh hari ini: {today_date}\n"
                 f"- Jenis majlis: {event_type}\n"
                 f"- Bilangan tetamu (pax): {pax} orang\n"
                 f"- Bajet pelanggan: RM{budget:,.2f}\n"
@@ -162,6 +167,7 @@ def build_task_string(data: dict) -> str:
         else:
             return (
                 f"Kami nak buat kenduri sendiri (rewang/gotong-royong):\n"
+                f"- Tarikh hari ini: {today_date}\n"
                 f"- Jenis majlis: {event_type}\n"
                 f"- Bilangan tetamu: {pax} orang\n"
                 f"- Bajet keseluruhan: RM{budget:,.2f}\n"
